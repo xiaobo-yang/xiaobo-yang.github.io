@@ -2,96 +2,96 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:59359/zh/posts/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/posts/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/posts/"
+                href="https://xiaobo-yang.github.io/posts/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/posts/"
+                href="https://xiaobo-yang.github.io/zh/posts/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/posts/third_zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/posts/third_zh/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:59359/zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/"
+                href="https://xiaobo-yang.github.io/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/"
+                href="https://xiaobo-yang.github.io/zh/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/tags/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/tags/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/tags/"
+                href="https://xiaobo-yang.github.io/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/tags/"
+                href="https://xiaobo-yang.github.io/zh/tags/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/tags/test2/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/tags/test2/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/tags/test2/"
+                href="https://xiaobo-yang.github.io/tags/test2/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/tags/test2/"
+                href="https://xiaobo-yang.github.io/zh/tags/test2/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/posts/second_zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/posts/second_zh/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:59359/zh/tags/test/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/tags/test/</loc>
     <lastmod>2024-12-17T16:38:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/tags/test/"
+                href="https://xiaobo-yang.github.io/tags/test/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/tags/test/"
+                href="https://xiaobo-yang.github.io/zh/tags/test/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/posts/first_zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/posts/first_zh/</loc>
     <lastmod>2024-12-17T16:38:19+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:59359/zh/contact-zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/contact-zh/</loc>
   </url><url>
-    <loc>http://localhost:59359/zh/categories/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="http://localhost:59359/categories/"
+                href="https://xiaobo-yang.github.io/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="http://localhost:59359/zh/categories/"
+                href="https://xiaobo-yang.github.io/zh/categories/"
                 />
   </url><url>
-    <loc>http://localhost:59359/zh/archive-zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/archive-zh/</loc>
   </url><url>
-    <loc>http://localhost:59359/zh/search-zh/</loc>
+    <loc>https://xiaobo-yang.github.io/zh/search-zh/</loc>
   </url>
 </urlset>

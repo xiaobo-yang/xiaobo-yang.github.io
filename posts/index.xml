@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on Xiaobo&#39;s Blog</title>
-    <link>http://localhost:59359/posts/</link>
+    <link>https://xiaobo-yang.github.io/posts/</link>
     <description>Recent content in Posts on Xiaobo&#39;s Blog</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>en-US</language>
     <lastBuildDate>Tue, 17 Dec 2024 16:38:21 +0800</lastBuildDate>
-    <atom:link href="http://localhost:59359/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xiaobo-yang.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Third</title>
-      <link>http://localhost:59359/posts/third/</link>
+      <link>https://xiaobo-yang.github.io/posts/third/</link>
       <pubDate>Tue, 17 Dec 2024 16:38:21 +0800</pubDate>
-      <guid>http://localhost:59359/posts/third/</guid>
+      <guid>https://xiaobo-yang.github.io/posts/third/</guid>
       <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
 &lt;p&gt;test for 2&lt;/p&gt;
 &lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;</description>
     </item>
     <item>
       <title>Second</title>
-      <link>http://localhost:59359/posts/second/</link>
+      <link>https://xiaobo-yang.github.io/posts/second/</link>
       <pubDate>Tue, 17 Dec 2024 16:38:20 +0800</pubDate>
-      <guid>http://localhost:59359/posts/second/</guid>
+      <guid>https://xiaobo-yang.github.io/posts/second/</guid>
       <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
 &lt;p&gt;test for 2&lt;/p&gt;
 &lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
@@ -30,9 +30,9 @@
     </item>
     <item>
       <title>First</title>
-      <link>http://localhost:59359/posts/first/</link>
+      <link>https://xiaobo-yang.github.io/posts/first/</link>
       <pubDate>Tue, 17 Dec 2024 16:38:19 +0800</pubDate>
-      <guid>http://localhost:59359/posts/first/</guid>
+      <guid>https://xiaobo-yang.github.io/posts/first/</guid>
       <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
 &lt;p&gt;test&lt;/p&gt;
 &lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
