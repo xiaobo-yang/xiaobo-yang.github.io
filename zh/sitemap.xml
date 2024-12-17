@@ -2,96 +2,96 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>//localhost:58782/zh/posts/</loc>
+    <loc>http://localhost:59359/zh/posts/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/posts/"
+                href="http://localhost:59359/posts/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/posts/"
+                href="http://localhost:59359/zh/posts/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/posts/third_zh/</loc>
+    <loc>http://localhost:59359/zh/posts/third_zh/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
   </url><url>
-    <loc>//localhost:58782/zh/</loc>
+    <loc>http://localhost:59359/zh/</loc>
     <lastmod>2024-12-17T16:38:21+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/"
+                href="http://localhost:59359/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/"
+                href="http://localhost:59359/zh/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/tags/</loc>
+    <loc>http://localhost:59359/zh/tags/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/tags/"
+                href="http://localhost:59359/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/tags/"
+                href="http://localhost:59359/zh/tags/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/tags/test2/</loc>
+    <loc>http://localhost:59359/zh/tags/test2/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/tags/test2/"
+                href="http://localhost:59359/tags/test2/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/tags/test2/"
+                href="http://localhost:59359/zh/tags/test2/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/posts/second_zh/</loc>
+    <loc>http://localhost:59359/zh/posts/second_zh/</loc>
     <lastmod>2024-12-17T16:38:20+08:00</lastmod>
   </url><url>
-    <loc>//localhost:58782/zh/tags/test/</loc>
+    <loc>http://localhost:59359/zh/tags/test/</loc>
     <lastmod>2024-12-17T16:38:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/tags/test/"
+                href="http://localhost:59359/tags/test/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/tags/test/"
+                href="http://localhost:59359/zh/tags/test/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/posts/first_zh/</loc>
+    <loc>http://localhost:59359/zh/posts/first_zh/</loc>
     <lastmod>2024-12-17T16:38:19+08:00</lastmod>
   </url><url>
-    <loc>//localhost:58782/zh/contact-zh/</loc>
+    <loc>http://localhost:59359/zh/contact-zh/</loc>
   </url><url>
-    <loc>//localhost:58782/zh/categories/</loc>
+    <loc>http://localhost:59359/zh/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-US"
-                href="//localhost:58782/categories/"
+                href="http://localhost:59359/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-CN"
-                href="//localhost:58782/zh/categories/"
+                href="http://localhost:59359/zh/categories/"
                 />
   </url><url>
-    <loc>//localhost:58782/zh/archive-zh/</loc>
+    <loc>http://localhost:59359/zh/archive-zh/</loc>
   </url><url>
-    <loc>//localhost:58782/zh/search-zh/</loc>
+    <loc>http://localhost:59359/zh/search-zh/</loc>
   </url>
 </urlset>
