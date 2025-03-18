@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Tags | Xiaobo&#39;s Blog</title>
+<title>Posts | Xiaobo&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="">
+<meta name="description" content="Posts - Xiaobo&#39;s Blog">
 <meta name="author" content="Xiaobo Yang">
-<link rel="canonical" href="https://xiaobo-yang.github.io/tags/">
+<link rel="canonical" href="https://xiaobo-yang.github.io/posts/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.d4da565dc53861aa93341c7e9ece0447238abcb1162eb9007a3a9068422d0975.css" integrity="sha256-1NpWXcU4YaqTNBx&#43;ns4ERyOKvLEWLrkAejqQaEItCXU=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://xiaobo-yang.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://xiaobo-yang.github.io/favicon-16x16.png">
@@ -18,9 +18,9 @@
 <link rel="mask-icon" href="https://xiaobo-yang.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://xiaobo-yang.github.io/tags/index.xml">
-<link rel="alternate" hreflang="en" href="https://xiaobo-yang.github.io/tags/">
-<link rel="alternate" hreflang="zh" href="https://xiaobo-yang.github.io/zh/tags/">
+<link rel="alternate" type="application/rss+xml" href="https://xiaobo-yang.github.io/posts/index.xml">
+<link rel="alternate" hreflang="en" href="https://xiaobo-yang.github.io/posts/">
+<link rel="alternate" hreflang="zh" href="https://xiaobo-yang.github.io/zh/posts/">
 <noscript>
     <style>
         #theme-toggle,
@@ -71,15 +71,30 @@
             ]
         });
     });
-</script><meta property="og:url" content="https://xiaobo-yang.github.io/tags/">
+</script><meta property="og:url" content="https://xiaobo-yang.github.io/posts/">
   <meta property="og:site_name" content="Xiaobo&#39;s Blog">
-  <meta property="og:title" content="Tags">
+  <meta property="og:title" content="Posts">
   <meta property="og:locale" content="en-US">
   <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tags">
+<meta name="twitter:title" content="Posts">
 <meta name="twitter:description" content="">
 
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://xiaobo-yang.github.io/posts/"
+    }
+  ]
+}
+</script>
 </head>
 
 <body class="list" id="top">
@@ -147,7 +162,7 @@
             </li>
             <li>
                 <a href="https://xiaobo-yang.github.io/tags/" title="Tags">
-                    <span class="active">Tags</span>
+                    <span>Tags</span>
                 </a>
             </li>
             <li>
@@ -158,16 +173,26 @@
         </ul>
     </nav>
 </header>
-<main class="main">
+<main class="main"> 
 <header class="page-header">
-    <h1>Tags</h1>
+  <h1>
+    Posts
+  </h1>
 </header>
 
-<ul class="terms-tags">
-    <li>
-        <a href="https://xiaobo-yang.github.io/tags/reinforcement-learning/">Reinforcement Learning <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-</ul>
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Theory In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.
+Schulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek’s GRPO algorithm (Guo et al. 2025) adopted this approach:
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-03-14 00:00:00 +0000 UTC'>March 14, 2025</span>&nbsp;·&nbsp;10 min&nbsp;·&nbsp;2021 words&nbsp;·&nbsp;Xiaobo Yang</footer>
+  <a class="entry-link" aria-label="post link to Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning" href="https://xiaobo-yang.github.io/posts/kl_grad/"></a>
+</article>
     </main>
     
 <footer class="footer">

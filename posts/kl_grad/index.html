@@ -1,39 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
+<html lang="en" dir="ltr">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>大模型强化学习训练中KL散度的梯度估计 | 潇博的博客</title>
+<title>Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning | Xiaobo&#39;s Blog</title>
 <meta name="keywords" content="Reinforcement Learning">
-<meta name="description" content="理论
-在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.
-Schulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:
-
-     
-            Fig. 1. GRPO 算法. (来源：Guo et al. 2025)
-        
-
-
-不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：
-$$
-\begin{align*}
-\nabla_\theta \widehat{\operatorname{KL}}(X)
-&amp;\approx \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}})=\nabla_\theta \int \pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right)dx\\
-&amp;= \int \nabla_\theta\pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\nabla_\theta\log\pi_\theta(x)dx\\
-&amp;=\int \pi_\theta(x)\cdot\nabla_\theta\log\pi_\theta(x)\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\cdot \frac{1}{\pi_\theta(x)}\nabla_\theta\pi_\theta(x)dx\\
-&amp;=E_{x\sim\pi_\theta}\left[\nabla_\theta\log\pi_\theta(X)\cdot\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right].
-\end{align*}
-$$
-但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，
-$$
-E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)]
-\neq \nabla_\theta E_{\pi_\theta}[ \widehat{\operatorname{KL}}(X)]
-= \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}}).
-$$">
+<meta name="description" content="Theory
+In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.
+Schulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&rsquo;s GRPO algorithm (Guo et al. 2025) adopted this approach:">
 <meta name="author" content="Xiaobo Yang">
-<link rel="canonical" href="https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/">
+<link rel="canonical" href="https://xiaobo-yang.github.io/posts/kl_grad/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.d4da565dc53861aa93341c7e9ece0447238abcb1162eb9007a3a9068422d0975.css" integrity="sha256-1NpWXcU4YaqTNBx&#43;ns4ERyOKvLEWLrkAejqQaEItCXU=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://xiaobo-yang.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://xiaobo-yang.github.io/favicon-16x16.png">
@@ -42,7 +20,7 @@ $$">
 <link rel="mask-icon" href="https://xiaobo-yang.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="zh" href="https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/">
+<link rel="alternate" hreflang="en" href="https://xiaobo-yang.github.io/posts/kl_grad/">
 <noscript>
     <style>
         #theme-toggle,
@@ -93,49 +71,22 @@ $$">
             ]
         });
     });
-</script><meta property="og:url" content="https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/">
-  <meta property="og:site_name" content="潇博的博客">
-  <meta property="og:title" content="大模型强化学习训练中KL散度的梯度估计">
-  <meta property="og:description" content="理论 在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.
-Schulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:
-Fig. 1. GRPO 算法. (来源：Guo et al. 2025)
-不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：
-$$ \begin{align*} \nabla_\theta \widehat{\operatorname{KL}}(X) &amp;\approx \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}})=\nabla_\theta \int \pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right)dx\\ &amp;= \int \nabla_\theta\pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\nabla_\theta\log\pi_\theta(x)dx\\ &amp;=\int \pi_\theta(x)\cdot\nabla_\theta\log\pi_\theta(x)\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\cdot \frac{1}{\pi_\theta(x)}\nabla_\theta\pi_\theta(x)dx\\ &amp;=E_{x\sim\pi_\theta}\left[\nabla_\theta\log\pi_\theta(X)\cdot\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right]. \end{align*} $$
-但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，
-$$ E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)] \neq \nabla_\theta E_{\pi_\theta}[ \widehat{\operatorname{KL}}(X)] = \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}}). $$">
-  <meta property="og:locale" content="zh-CN">
+</script><meta property="og:url" content="https://xiaobo-yang.github.io/posts/kl_grad/">
+  <meta property="og:site_name" content="Xiaobo&#39;s Blog">
+  <meta property="og:title" content="Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning">
+  <meta property="og:description" content="Theory In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.
+Schulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek’s GRPO algorithm (Guo et al. 2025) adopted this approach:">
+  <meta property="og:locale" content="en-US">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-03-14T00:00:00+00:00">
     <meta property="article:modified_time" content="2025-03-14T00:00:00+00:00">
     <meta property="article:tag" content="Reinforcement Learning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="大模型强化学习训练中KL散度的梯度估计">
-<meta name="twitter:description" content="理论
-在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.
-Schulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:
-
-     
-            Fig. 1. GRPO 算法. (来源：Guo et al. 2025)
-        
-
-
-不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：
-$$
-\begin{align*}
-\nabla_\theta \widehat{\operatorname{KL}}(X)
-&amp;\approx \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}})=\nabla_\theta \int \pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right)dx\\
-&amp;= \int \nabla_\theta\pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\nabla_\theta\log\pi_\theta(x)dx\\
-&amp;=\int \pi_\theta(x)\cdot\nabla_\theta\log\pi_\theta(x)\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\cdot \frac{1}{\pi_\theta(x)}\nabla_\theta\pi_\theta(x)dx\\
-&amp;=E_{x\sim\pi_\theta}\left[\nabla_\theta\log\pi_\theta(X)\cdot\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right].
-\end{align*}
-$$
-但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，
-$$
-E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)]
-\neq \nabla_\theta E_{\pi_\theta}[ \widehat{\operatorname{KL}}(X)]
-= \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}}).
-$$">
+<meta name="twitter:title" content="Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning">
+<meta name="twitter:description" content="Theory
+In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.
+Schulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&rsquo;s GRPO algorithm (Guo et al. 2025) adopted this approach:">
 
 
 <script type="application/ld+json">
@@ -147,13 +98,13 @@ $$">
       "@type": "ListItem",
       "position":  1 ,
       "name": "Posts",
-      "item": "https://xiaobo-yang.github.io/zh/posts/"
+      "item": "https://xiaobo-yang.github.io/posts/"
     }, 
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "大模型强化学习训练中KL散度的梯度估计",
-      "item": "https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/"
+      "name": "Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning",
+      "item": "https://xiaobo-yang.github.io/posts/kl_grad/"
     }
   ]
 }
@@ -162,15 +113,15 @@ $$">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "大模型强化学习训练中KL散度的梯度估计",
-  "name": "大模型强化学习训练中KL散度的梯度估计",
-  "description": "理论 在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \\leftarrow r - \\beta\\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{ref})$，一起进行反向传播.\nSchulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:\nFig. 1. GRPO 算法. (来源：Guo et al. 2025)\n不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：\n$$ \\begin{align*} \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026amp;\\approx \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}})=\\nabla_\\theta \\int \\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right)dx\\\\ \u0026amp;= \\int \\nabla_\\theta\\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\nabla_\\theta\\log\\pi_\\theta(x)dx\\\\ \u0026amp;=\\int \\pi_\\theta(x)\\cdot\\nabla_\\theta\\log\\pi_\\theta(x)\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\cdot \\frac{1}{\\pi_\\theta(x)}\\nabla_\\theta\\pi_\\theta(x)dx\\\\ \u0026amp;=E_{x\\sim\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X)\\cdot\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right]. \\end{align*} $$\n但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，\n$$ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \\neq \\nabla_\\theta E_{\\pi_\\theta}[ \\widehat{\\operatorname{KL}}(X)] = \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). $$\n",
+  "headline": "Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning",
+  "name": "Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning",
+  "description": "Theory In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \\leftarrow r - \\beta\\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{ref})$ for backpropagation.\nSchulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek\u0026rsquo;s GRPO algorithm (Guo et al. 2025) adopted this approach:\n",
   "keywords": [
     "Reinforcement Learning"
   ],
-  "articleBody": "理论 在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \\leftarrow r - \\beta\\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{ref})$，一起进行反向传播.\nSchulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:\nFig. 1. GRPO 算法. (来源：Guo et al. 2025)\n不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：\n$$ \\begin{align*} \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026\\approx \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}})=\\nabla_\\theta \\int \\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right)dx\\\\ \u0026= \\int \\nabla_\\theta\\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\nabla_\\theta\\log\\pi_\\theta(x)dx\\\\ \u0026=\\int \\pi_\\theta(x)\\cdot\\nabla_\\theta\\log\\pi_\\theta(x)\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\cdot \\frac{1}{\\pi_\\theta(x)}\\nabla_\\theta\\pi_\\theta(x)dx\\\\ \u0026=E_{x\\sim\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X)\\cdot\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right]. \\end{align*} $$\n但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，\n$$ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \\neq \\nabla_\\theta E_{\\pi_\\theta}[ \\widehat{\\operatorname{KL}}(X)] = \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). $$\n事实上，他们之间差了一项：\n$$ \\begin{align*} \\nabla_\\theta E_{\\pi_\\theta}[f_\\theta(X)] \u0026= \\int \\nabla_\\theta\\pi_\\theta(x)\\cdot f_\\theta(x) + \\pi_\\theta(x)\\cdot\\nabla_\\theta f_\\theta(x) dx\\\\ \u0026= \\int \\pi_\\theta(x)\\cdot\\nabla_\\theta \\log\\pi_\\theta(x)\\cdot f_\\theta(x) dx + \\int \\pi_\\theta(x)\\cdot\\nabla_\\theta f_\\theta(x) dx\\\\ \u0026= E_{\\pi_\\theta}[\\nabla_\\theta\\log\\pi_\\theta(X)\\cdot f_\\theta(X)] + E_{\\pi_\\theta}[\\nabla_\\theta f_\\theta(X)]. \\end{align*} $$\n对于policy生成的样本 $X\\sim\\pi_\\theta(\\cdot)$，分别取 $\\widehat{\\operatorname{KL}}$ 为k1、k2、k3 loss可知，\nk1\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\log\\pi_\\theta(X) - \\log\\pi_{ref}(X);\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X)；\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= \\int \\pi_\\theta(x)\\cdot \\frac{1}{\\pi_\\theta(x)}\\nabla_\\theta\\pi_\\theta(x)dx=0 \\neq \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\nk2\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{1}{2}(\\log\\pi_\\theta(X) - \\log\\pi_{ref}(X))^2;\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X)\\cdot\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)；\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right] = \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\nk3\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} - 1 - \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right);\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\left(1 - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right);\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\left(1 - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right)\\right]\\neq \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\n可见，虽然k2 loss并不是kl的无偏估计，但其梯度是kl的梯度的无偏估计；而k1和k3则相反。值得注意的是，k1 loss的梯度的期望始终为0，在大的batch size条件下，这是平凡的。这也说明了GRPO算法中采用的KL loss不是一个很好的估计量。\n有时大家还会使用逆KL散度，它将policy model和reference model在KL散度的计算中交换位置。由于样本 $X$ 始终是从policy model中抽出，我们需要乘以一个probability ratio，\n$$ \\begin{align*} \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta) \u0026= E_{X\\sim\\pi_{ref}}\\left[ \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] = E_{X\\sim\\pi_{\\theta}}\\left[ \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right]; \\\\ \\nabla_\\theta \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta) \u0026= E_{X\\sim\\pi_{ref}} [-\\nabla_\\theta \\log \\pi_\\theta(X)] = E_{X\\sim\\pi_{\\theta}}\\left[ - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\nabla_\\theta \\log \\pi_\\theta(X) \\right] \\\\ \u0026= E_{X\\sim\\pi_{\\theta}}\\left[ \\left(- \\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)^2} \\right) \\cdot \\nabla_\\theta \\pi_\\theta(X) \\right] \\\\ \u0026= E_{X\\sim\\pi_{\\theta}}\\left[ \\nabla_\\theta \\left(\\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)} \\right) \\right]. \\end{align*} $$\n于是，如果要在KL loss中估计其梯度，一个无偏估计可取\n$$ \\widehat{\\operatorname{KL}}(X) = \\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)}. $$\n此时KL的无偏估计的梯度仍然不等于KL的梯度的无偏估计：\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right); \\\\ E_{X\\sim\\pi_{\\theta}}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{X\\sim\\pi_{\\theta}} \\left[ \\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\cdot (- \\nabla_\\theta\\log\\pi_\\theta(X)) \\cdot \\left( 1 + \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] \\\\ \u0026= E_{X\\sim\\pi_{ref}} \\left[ (- \\nabla_\\theta\\log\\pi_\\theta(X)) \\cdot \\left( 1 + \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] \\\\ \u0026\\neq E_{X\\sim\\pi_{ref}} [-\\nabla_\\theta \\log \\pi_\\theta(X)] = \\nabla_\\theta \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta). \\end{align*} $$\n实验 考虑 $\\pi_\\theta=\\mathcal{N}(0,1),~\\pi_{ref}=\\mathcal{N}(1,1.1)$，参数 $\\theta$ 为高斯分布的均值和标准差，估计结果与理论分析一致：\nFig. 2. KL估计实验结果\nAverage gradient value comparison (mean parameter): True KL gradient: -0.826446 k1 average gradient: 0.000137 k2 average gradient: -0.826291 k3 average gradient: -0.999618 Average gradient value comparison (standard deviation parameter): True KL gradient: -0.173554 k1 average gradient: -0.000104 k2 average gradient: -0.173379 k3 average gradient: -1.209091 Reverse KL - Average gradient value comparison (mean parameter): True Reverse KL gradient: -1.000000 reverse_k1 average gradient: -2.718389 reverse_k2 average gradient: -0.999755 Reverse KL - Average gradient value comparison (standard deviation parameter): True Reverse KL gradient: -1.210000 reverse_k1 average gradient: -4.496196 reverse_k2 average gradient: -1.208987 KL - Comparison of bias and standard deviation for mean parameter gradients: ╒════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════╪═════════════╪══════════════╡ │ k1 │ 1.0002 │ 0.0054 │ ├────┼─────────────┼──────────────┤ │ k2 │ 0.0002 │ 0.0065 │ ├────┼─────────────┼──────────────┤ │ k3 │ 0.2095 │ 0.026 │ ╘════╧═════════════╧══════════════╛ KL - Comparison of bias and standard deviation for standard deviation parameter gradients: ╒════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════╪═════════════╪══════════════╡ │ k1 │ 0.9994 │ 0.0359 │ ├────┼─────────────┼──────────────┤ │ k2 │ 0.001 │ 0.0686 │ ├────┼─────────────┼──────────────┤ │ k3 │ 5.9667 │ 0.4311 │ ╘════╧═════════════╧══════════════╛ Reverse KL - Comparison of bias and standard deviation for mean parameter gradients: ╒════════════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════════════╪═════════════╪══════════════╡ │ reverse_k1 │ 1.7184 │ 0.1081 │ ├────────────┼─────────────┼──────────────┤ │ reverse_k2 │ 0.0002 │ 0.0231 │ ╘════════════╧═════════════╧══════════════╛ Reverse KL - Comparison of bias and standard deviation for standard deviation parameter gradients: ╒════════════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════════════╪═════════════╪══════════════╡ │ reverse_k1 │ 2.7159 │ 0.3419 │ ├────────────┼─────────────┼──────────────┤ │ reverse_k2 │ 0.0008 │ 0.0636 │ ╘════════════╧═════════════╧══════════════╛ 实验代码 import torch import numpy as np import matplotlib.pyplot as plt from torch.distributions import Normal import seaborn as sns # Set random seed for reproducibility torch.manual_seed(42) np.random.seed(42) # Define parameters for two normal distributions def setup_distributions(mu_theta=0.0, sigma_theta=1.0, mu_ref=1.0, sigma_ref=1.1): # Create trainable parameters mu_theta_param = torch.tensor(mu_theta, requires_grad=True) sigma_theta_param = torch.tensor(sigma_theta, requires_grad=True) # Reference distribution parameters (fixed) mu_ref_param = torch.tensor(mu_ref) sigma_ref_param = torch.tensor(sigma_ref) # Create distributions pi_theta = Normal(mu_theta_param, sigma_theta_param) pi_ref = Normal(mu_ref_param, sigma_ref_param) return pi_theta, pi_ref, mu_theta_param, sigma_theta_param # Calculate the true KL divergence (analytical solution for normal distributions) def true_kl_divergence(pi_theta, pi_ref): mu_theta = pi_theta.loc sigma_theta = pi_theta.scale mu_ref = pi_ref.loc sigma_ref = pi_ref.scale kl = (torch.log(sigma_ref/sigma_theta) + (sigma_theta**2 + (mu_theta - mu_ref)**2)/(2*sigma_ref**2) - 0.5) rkl = (torch.log(sigma_theta/sigma_ref) + (sigma_ref**2 + (mu_ref - mu_theta)**2)/(2*sigma_theta**2) - 0.5) return kl, rkl # Three different KL divergence estimates def k1_loss(x, pi_theta, pi_ref): return pi_theta.log_prob(x) - pi_ref.log_prob(x) def k2_loss(x, pi_theta, pi_ref): return 0.5 * (pi_theta.log_prob(x) - pi_ref.log_prob(x))**2 def k3_loss(x, pi_theta, pi_ref): ratio = torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) return ratio - 1 - torch.log(ratio) # Two different reverse KL divergence estimates def reverse_k1_loss(x, pi_theta, pi_ref): ratio = torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) return ratio * (pi_ref.log_prob(x) - pi_theta.log_prob(x)) def reverse_k2_loss(x, pi_theta, pi_ref): return torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) # Sample and compute gradients def estimate_gradients(sample_size=10000, num_trials=10): pi_theta, pi_ref, mu_param, sigma_param = setup_distributions() # Compute the gradient of the true and reverse KL divergence true_kl, true_reverse_kl = true_kl_divergence(pi_theta, pi_ref) true_kl.backward() true_grad_mu = mu_param.grad.item() true_grad_sigma = sigma_param.grad.item() mu_param.grad.zero_() sigma_param.grad.zero_() true_reverse_kl.backward() true_reverse_grad_mu = mu_param.grad.item() true_reverse_grad_sigma = sigma_param.grad.item() mu_param.grad.zero_() sigma_param.grad.zero_() # Store gradients from different estimates k1_grads_mu = [] k1_grads_sigma = [] k2_grads_mu = [] k2_grads_sigma = [] k3_grads_mu = [] k3_grads_sigma = [] reverse_k1_grads_mu = [] reverse_k1_grads_sigma = [] reverse_k2_grads_mu = [] reverse_k2_grads_sigma = [] for _ in range(num_trials): pi_theta, pi_ref, mu_param, sigma_param = setup_distributions() # Sample from the current policy samples = pi_theta.sample((sample_size,)) # Get gradient of KL estimation k1_values = k1_loss(samples, pi_theta, pi_ref) k1_mean = k1_values.mean() k1_mean.backward() k1_grads_mu.append(mu_param.grad.item()) k1_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() k2_values = k2_loss(samples, pi_theta, pi_ref) k2_mean = k2_values.mean() k2_mean.backward() k2_grads_mu.append(mu_param.grad.item()) k2_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() k3_values = k3_loss(samples, pi_theta, pi_ref) k3_mean = k3_values.mean() k3_mean.backward() k3_grads_mu.append(mu_param.grad.item()) k3_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() reverse_k1_values = reverse_k1_loss(samples, pi_theta, pi_ref) reverse_k1_mean = reverse_k1_values.mean() reverse_k1_mean.backward() reverse_k1_grads_mu.append(mu_param.grad.item()) reverse_k1_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() reverse_k2_values = reverse_k2_loss(samples, pi_theta, pi_ref) reverse_k2_mean = reverse_k2_values.mean() reverse_k2_mean.backward() reverse_k2_grads_mu.append(mu_param.grad.item()) reverse_k2_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() return { 'true_grad_mu': true_grad_mu, 'true_grad_sigma': true_grad_sigma, 'k1_grads_mu': k1_grads_mu, 'k1_grads_sigma': k1_grads_sigma, 'k2_grads_mu': k2_grads_mu, 'k2_grads_sigma': k2_grads_sigma, 'k3_grads_mu': k3_grads_mu, 'k3_grads_sigma': k3_grads_sigma, 'true_reverse_grad_mu': true_reverse_grad_mu, 'true_reverse_grad_sigma': true_reverse_grad_sigma, 'reverse_k1_grads_mu': reverse_k1_grads_mu, 'reverse_k1_grads_sigma': reverse_k1_grads_sigma, 'reverse_k2_grads_mu': reverse_k2_grads_mu, 'reverse_k2_grads_sigma': reverse_k2_grads_sigma } def create_nice_table(results): true_grad_mu = results['true_grad_mu'] true_grad_sigma = results['true_grad_sigma'] true_reverse_grad_mu = results['true_reverse_grad_mu'] true_reverse_grad_sigma = results['true_reverse_grad_sigma'] k1_bias_mu = abs(np.mean(results['k1_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k2_bias_mu = abs(np.mean(results['k2_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k3_bias_mu = abs(np.mean(results['k3_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k1_std_mu = np.std(results['k1_grads_mu']) / abs(true_grad_mu) k2_std_mu = np.std(results['k2_grads_mu']) / abs(true_grad_mu) k3_std_mu = np.std(results['k3_grads_mu']) / abs(true_grad_mu) k1_bias_sigma = abs(np.mean(results['k1_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k2_bias_sigma = abs(np.mean(results['k2_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k3_bias_sigma = abs(np.mean(results['k3_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k1_std_sigma = np.std(results['k1_grads_sigma']) / abs(true_grad_sigma) k2_std_sigma = np.std(results['k2_grads_sigma']) / abs(true_grad_sigma) k3_std_sigma = np.std(results['k3_grads_sigma']) / abs(true_grad_sigma) reverse_k1_bias_mu = abs(np.mean(results['reverse_k1_grads_mu']) - true_reverse_grad_mu) / abs(true_reverse_grad_mu) reverse_k2_bias_mu = abs(np.mean(results['reverse_k2_grads_mu']) - true_reverse_grad_mu) / abs(true_reverse_grad_mu) reverse_k1_std_mu = np.std(results['reverse_k1_grads_mu']) / abs(true_reverse_grad_mu) reverse_k2_std_mu = np.std(results['reverse_k2_grads_mu']) / abs(true_reverse_grad_mu) reverse_k1_bias_sigma = abs(np.mean(results['reverse_k1_grads_sigma']) - true_reverse_grad_sigma) / abs(true_reverse_grad_sigma) reverse_k2_bias_sigma = abs(np.mean(results['reverse_k2_grads_sigma']) - true_reverse_grad_sigma) / abs(true_reverse_grad_sigma) reverse_k1_std_sigma = np.std(results['reverse_k1_grads_sigma']) / abs(true_reverse_grad_sigma) reverse_k2_std_sigma = np.std(results['reverse_k2_grads_sigma']) / abs(true_reverse_grad_sigma) # Create table from tabulate import tabulate import pandas as pd df_mu = pd.DataFrame({ 'bias/true': [k1_bias_mu, k2_bias_mu, k3_bias_mu], 'stdev/true': [k1_std_mu, k2_std_mu, k3_std_mu] }, index=['k1', 'k2', 'k3']) df_reverse_mu = pd.DataFrame({ 'bias/true': [reverse_k1_bias_mu, reverse_k2_bias_mu], 'stdev/true': [reverse_k1_std_mu, reverse_k2_std_mu] }, index=['reverse_k1', 'reverse_k2']) df_sigma = pd.DataFrame({ 'bias/true': [k1_bias_sigma, k2_bias_sigma, k3_bias_sigma], 'stdev/true': [k1_std_sigma, k2_std_sigma, k3_std_sigma] }, index=['k1', 'k2', 'k3']) df_reverse_sigma = pd.DataFrame({ 'bias/true': [reverse_k1_bias_sigma, reverse_k2_bias_sigma], 'stdev/true': [reverse_k1_std_sigma, reverse_k2_std_sigma] }, index=['reverse_k1', 'reverse_k2']) # Format values df_mu = df_mu.round(4) df_sigma = df_sigma.round(4) df_reverse_mu = df_reverse_mu.round(4) df_reverse_sigma = df_reverse_sigma.round(4) # Print nice table print(\"KL - Comparison of bias and standard deviation for mean parameter gradients:\") print(tabulate(df_mu, headers='keys', tablefmt='fancy_grid')) print(\"\\nKL - Comparison of bias and standard deviation for standard deviation parameter gradients:\") print(tabulate(df_sigma, headers='keys', tablefmt='fancy_grid')) print(\"\\nReverse KL - Comparison of bias and standard deviation for mean parameter gradients:\") print(tabulate(df_reverse_mu, headers='keys', tablefmt='fancy_grid')) print(\"\\nReverse KL - Comparison of bias and standard deviation for standard deviation parameter gradients:\") print(tabulate(df_reverse_sigma, headers='keys', tablefmt='fancy_grid')) return df_mu, df_sigma, df_reverse_mu, df_reverse_sigma def visualize_results(results): fig, axes = plt.subplots(2, 2, figsize=(16, 12)) axes[0,0].axhline(y=results['true_grad_mu'], color='r', linestyle='-', label='True KL') sns.violinplot(data=[results['k1_grads_mu'], results['k2_grads_mu'], results['k3_grads_mu']], ax=axes[0,0]) axes[0,0].set_title('Gradient of KL Divergence with Respect to Mean Parameter') axes[0,0].set_xticks([0,1,2]) axes[0,0].set_xticklabels(['k1', 'k2', 'k3']) axes[0,0].set_ylabel('Gradient Value') axes[0,0].legend() axes[0,1].axhline(y=results['true_grad_sigma'], color='r', linestyle='-', label='True KL') sns.violinplot(data=[results['k1_grads_sigma'], results['k2_grads_sigma'], results['k3_grads_sigma']], ax=axes[0,1]) axes[0,1].set_title('Gradient of KL Divergence with Respect to Standard Deviation Parameter') axes[0,1].set_xticks([0,1,2]) axes[0,1].set_xticklabels(['k1', 'k2', 'k3']) axes[0,1].set_ylabel('Gradient Value') axes[0,1].legend() axes[1,0].axhline(y=results['true_reverse_grad_mu'], color='r', linestyle='-', label='True Reverse KL') sns.violinplot(data=[results['reverse_k1_grads_mu'], results['reverse_k2_grads_mu']], ax=axes[1,0]) axes[1,0].set_title('Gradient of Reverse KL Divergence with Respect to Mean Parameter') axes[1,0].set_xticks([0,1]) axes[1,0].set_xticklabels(['reverse_k1', 'reverse_k2']) axes[1,0].set_ylabel('Gradient Value') axes[1,0].legend() axes[1,1].axhline(y=results['true_reverse_grad_sigma'], color='r', linestyle='-', label='True Reverse KL') sns.violinplot(data=[results['reverse_k1_grads_sigma'], results['reverse_k2_grads_sigma']], ax=axes[1,1]) axes[1,1].set_title('Gradient of Reverse KL Divergence with Respect to Standard Deviation Parameter') axes[1,1].set_xticks([0,1]) axes[1,1].set_xticklabels(['reverse_k1', 'reverse_k2']) axes[1,1].set_ylabel('Gradient Value') axes[1,1].legend() plt.tight_layout() plt.show() # Print mean comparison print(\"Average gradient value comparison (mean parameter):\") print(f\"True KL gradient: {results['true_grad_mu']:.6f}\") print(f\"k1 average gradient: {np.mean(results['k1_grads_mu']):.6f}\") print(f\"k2 average gradient: {np.mean(results['k2_grads_mu']):.6f}\") print(f\"k3 average gradient: {np.mean(results['k3_grads_mu']):.6f}\") print(\"\\nAverage gradient value comparison (standard deviation parameter):\") print(f\"True KL gradient: {results['true_grad_sigma']:.6f}\") print(f\"k1 average gradient: {np.mean(results['k1_grads_sigma']):.6f}\") print(f\"k2 average gradient: {np.mean(results['k2_grads_sigma']):.6f}\") print(f\"k3 average gradient: {np.mean(results['k3_grads_sigma']):.6f}\") print(\"\\nReverse KL - Average gradient value comparison (mean parameter):\") print(f\"True Reverse KL gradient: {results['true_reverse_grad_mu']:.6f}\") print(f\"reverse_k1 average gradient: {np.mean(results['reverse_k1_grads_mu']):.6f}\") print(f\"reverse_k2 average gradient: {np.mean(results['reverse_k2_grads_mu']):.6f}\") print(\"\\nReverse KL - Average gradient value comparison (standard deviation parameter):\") print(f\"True Reverse KL gradient: {results['true_reverse_grad_sigma']:.6f}\") print(f\"reverse_k1 average gradient: {np.mean(results['reverse_k1_grads_sigma']):.6f}\") print(f\"reverse_k2 average gradient: {np.mean(results['reverse_k2_grads_sigma']):.6f}\") # Add nice table output print() df = create_nice_table(results) if __name__ == \"__main__\": sample_size = 50000 num_trials = 1000 results = estimate_gradients(sample_size, num_trials) visualize_results(results) 补充 k2 loss方差减小的思路，可以模仿 Schulman (2020) 的分析，代入一个零均值统计量，待定系数法求解。\n首先对 $\\theta$ 逐分量求解，\n$$ \\begin{align*} \\lambda_i^* \u0026= \\argmin_\\lambda E_{X\\sim\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2 \\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right) - \\lambda\\right)^2\\right]\\\\ \u0026= \\frac{E_{\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2\\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right)^2\\right]}{E_{\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2\\right]}. \\end{align*} $$\n然后逐分量使用修正后的估计量，\n$$ \\nabla_{\\theta_i} = \\nabla_{\\theta_i} \\frac{1}{2}(\\log\\pi_\\theta(X) - \\log\\pi_{ref}(X) - \\lambda_i^*)^2. $$\n然而这样却很麻烦。首先 $\\lambda$ 很难估计，需要先得到score（log prob梯度）才能计算，故可能需要两次backward；其次，每个分量都要单独估计。\n作为替代，可考虑使用上一步的score以及单个 $\\lambda$ 估计量，\n$$ \\hat{\\lambda}^* = \\frac{\\sum_i|\\nabla_{\\theta_{old}}\\log\\pi_{\\theta}(X_i)|_2^2\\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X_i)}{\\pi_{ref}(X_i)}\\right)\\right)^2}{\\sum_i|\\nabla_{\\theta_{old}}\\log\\pi_{\\theta}(X_i)|_2^2}. $$\n不过这样仍然较为复杂，需要使用逐样本的grad norm，并且已经引入了一些bias，未必合算。KL loss本身起到的作用也未可知，是否需要在这里做额外的方差减小有待商榷，或许k2即足够。\n引用 引用格式如下：\nYang, Xiaobo. (Mar 2025). Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning. Xiabo’s Blog.\nhttps://xiaobo-yang.github.io/posts/kl_grad/.\n或者使用BibTeX格式：\n@article{yang2025klgradient, title = \"Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning.\", author = \"Yang, Xiaobo\", journal = \"xiaobo-yang.github.io\", year = \"2025\", month = \"Mar\", url = \"https://xiaobo-yang.github.io/posts/kl_grad/\" } 参考 [1] John Schulman “Approximating KL Divergence.” 2020.\n[2] Guo et al. “DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning” 2025.\n",
-  "wordCount" : "1607",
-  "inLanguage": "zh",
+  "articleBody": "Theory In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \\leftarrow r - \\beta\\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{ref})$ for backpropagation.\nSchulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek’s GRPO algorithm (Guo et al. 2025) adopted this approach:\nFig. 1. GRPO Algorithm. (Source: Guo et al. 2025)\nHowever, when using KL Loss, we actually estimate the gradient of KL divergence through sampling, which differs somewhat from Schulman (2020)’s analysis. In training, after constructing the estimator, we directly use it as a loss for backpropagation, hoping it remains a good approximation:\n$$ \\begin{align*} \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026\\approx \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}})=\\nabla_\\theta \\int \\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right)dx\\\\ \u0026= \\int \\nabla_\\theta\\pi_\\theta(x)\\cdot\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\nabla_\\theta\\log\\pi_\\theta(x)dx\\\\ \u0026=\\int \\pi_\\theta(x)\\cdot\\nabla_\\theta\\log\\pi_\\theta(x)\\log\\left(\\frac{\\pi_\\theta(x)}{\\pi_{ref}(x)}\\right) + \\pi_\\theta(x)\\cdot \\frac{1}{\\pi_\\theta(x)}\\nabla_\\theta\\pi_\\theta(x)dx\\\\ \u0026=E_{x\\sim\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X)\\cdot\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right]. \\end{align*} $$\nHowever, the gradient of an unbiased KL estimator is not necessarily an unbiased estimator of the KL gradient:\n$$ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \\neq \\nabla_\\theta E_{\\pi_\\theta}[ \\widehat{\\operatorname{KL}}(X)] = \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). $$\nIn fact, they differ by one term:\n$$ \\begin{align*} \\nabla_\\theta E_{\\pi_\\theta}[f_\\theta(X)] \u0026= \\int \\nabla_\\theta\\pi_\\theta(x)\\cdot f_\\theta(x) + \\pi_\\theta(x)\\cdot\\nabla_\\theta f_\\theta(x) dx\\\\ \u0026= \\int \\pi_\\theta(x)\\cdot\\nabla_\\theta \\log\\pi_\\theta(x)\\cdot f_\\theta(x) dx + \\int \\pi_\\theta(x)\\cdot\\nabla_\\theta f_\\theta(x) dx\\\\ \u0026= E_{\\pi_\\theta}[\\nabla_\\theta\\log\\pi_\\theta(X)\\cdot f_\\theta(X)] + E_{\\pi_\\theta}[\\nabla_\\theta f_\\theta(X)]. \\end{align*} $$\nFor samples $X\\sim\\pi_\\theta(\\cdot)$ generated by the policy, taking $\\widehat{\\operatorname{KL}}$ as k1, k2, and k3 loss respectively:\nk1\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\log\\pi_\\theta(X) - \\log\\pi_{ref}(X);\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X)；\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= \\int \\pi_\\theta(x)\\cdot \\frac{1}{\\pi_\\theta(x)}\\nabla_\\theta\\pi_\\theta(x)dx=0 \\neq \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\nk2\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{1}{2}(\\log\\pi_\\theta(X) - \\log\\pi_{ref}(X))^2;\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X)\\cdot\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)；\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right] = \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\nk3\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} - 1 - \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right);\\\\ \\nabla_\\theta \\widehat{\\operatorname{KL}}(X) \u0026= \\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\left(1 - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right);\\\\ E_{\\pi_\\theta}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{\\pi_\\theta}\\left[\\nabla_\\theta\\log\\pi_\\theta(X) \\cdot \\left(1 - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right)\\right]\\neq \\nabla_\\theta \\operatorname{KL}(\\pi_\\theta||\\pi_{\\theta_{ref}}). \\end{align*} $$\nAs we can see, although k2 loss is not an unbiased estimator of KL divergence, its gradient is an unbiased estimator of KL gradient; while k1 and k3 are the opposite. Notably, the expectation of k1 loss gradient is always zero, which becomes trivial under large batch sizes. This also indicates that the KL loss adopted in the GRPO algorithm is not a good estimator.\nSometimes people also use reverse KL divergence, which swaps the positions of policy model and reference model in the KL divergence calculation. Since samples $X$ are always drawn from the policy model, we need to multiply by a probability ratio:\n$$ \\begin{align*} \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta) \u0026= E_{X\\sim\\pi_{ref}}\\left[ \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] = E_{X\\sim\\pi_{\\theta}}\\left[ \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right]; \\\\ \\nabla_\\theta \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta) \u0026= E_{X\\sim\\pi_{ref}} [-\\nabla_\\theta \\log \\pi_\\theta(X)] = E_{X\\sim\\pi_{\\theta}}\\left[ - \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\nabla_\\theta \\log \\pi_\\theta(X) \\right] \\\\ \u0026= E_{X\\sim\\pi_{\\theta}}\\left[ \\left(- \\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)^2} \\right) \\cdot \\nabla_\\theta \\pi_\\theta(X) \\right] \\\\ \u0026= E_{X\\sim\\pi_{\\theta}}\\left[ \\nabla_\\theta \\left(\\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)} \\right) \\right]. \\end{align*} $$\nTherefore, if we want to estimate its gradient in KL loss, an unbiased estimator can be:\n$$ \\widehat{\\operatorname{KL}}(X) = \\frac{\\pi_{ref}(X) }{\\pi_\\theta(X)}. $$\nIn this case, the gradient of the unbiased KL estimator is still not equal to the unbiased estimator of KL gradient:\n$$ \\begin{align*} \\widehat{\\operatorname{KL}}(X) \u0026= \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)} \\cdot \\log\\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right); \\\\ E_{X\\sim\\pi_{\\theta}}[\\nabla_\\theta \\widehat{\\operatorname{KL}}(X)] \u0026= E_{X\\sim\\pi_{\\theta}} \\left[ \\left(\\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\cdot (- \\nabla_\\theta\\log\\pi_\\theta(X)) \\cdot \\left( 1 + \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] \\\\ \u0026= E_{X\\sim\\pi_{ref}} \\left[ (- \\nabla_\\theta\\log\\pi_\\theta(X)) \\cdot \\left( 1 + \\frac{\\pi_{ref}(X)}{\\pi_\\theta(X)}\\right) \\right] \\\\ \u0026\\neq E_{X\\sim\\pi_{ref}} [-\\nabla_\\theta \\log \\pi_\\theta(X)] = \\nabla_\\theta \\operatorname{KL}(\\pi_{ref}||\\pi_\\theta). \\end{align*} $$\nExperiments Consider $\\pi_\\theta=\\mathcal{N}(0,1),~\\pi_{ref}=\\mathcal{N}(1,1.1)$, where parameter $\\theta$ represents the mean and standard deviation of the Gaussian distribution. The experimental results align with theoretical analysis:\nFig. 2. Gradient Estimation of KL\nAverage gradient value comparison (mean parameter): True KL gradient: -0.826446 k1 average gradient: 0.000137 k2 average gradient: -0.826291 k3 average gradient: -0.999618 Average gradient value comparison (standard deviation parameter): True KL gradient: -0.173554 k1 average gradient: -0.000104 k2 average gradient: -0.173379 k3 average gradient: -1.209091 Reverse KL - Average gradient value comparison (mean parameter): True Reverse KL gradient: -1.000000 reverse_k1 average gradient: -2.718389 reverse_k2 average gradient: -0.999755 Reverse KL - Average gradient value comparison (standard deviation parameter): True Reverse KL gradient: -1.210000 reverse_k1 average gradient: -4.496196 reverse_k2 average gradient: -1.208987 KL - Comparison of bias and standard deviation for mean parameter gradients: ╒════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════╪═════════════╪══════════════╡ │ k1 │ 1.0002 │ 0.0054 │ ├────┼─────────────┼──────────────┤ │ k2 │ 0.0002 │ 0.0065 │ ├────┼─────────────┼──────────────┤ │ k3 │ 0.2095 │ 0.026 │ ╘════╧═════════════╧══════════════╛ KL - Comparison of bias and standard deviation for standard deviation parameter gradients: ╒════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════╪═════════════╪══════════════╡ │ k1 │ 0.9994 │ 0.0359 │ ├────┼─────────────┼──────────────┤ │ k2 │ 0.001 │ 0.0686 │ ├────┼─────────────┼──────────────┤ │ k3 │ 5.9667 │ 0.4311 │ ╘════╧═════════════╧══════════════╛ Reverse KL - Comparison of bias and standard deviation for mean parameter gradients: ╒════════════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════════════╪═════════════╪══════════════╡ │ reverse_k1 │ 1.7184 │ 0.1081 │ ├────────────┼─────────────┼──────────────┤ │ reverse_k2 │ 0.0002 │ 0.0231 │ ╘════════════╧═════════════╧══════════════╛ Reverse KL - Comparison of bias and standard deviation for standard deviation parameter gradients: ╒════════════╤═════════════╤══════════════╕ │ │ bias/true │ stdev/true │ ╞════════════╪═════════════╪══════════════╡ │ reverse_k1 │ 2.7159 │ 0.3419 │ ├────────────┼─────────────┼──────────────┤ │ reverse_k2 │ 0.0008 │ 0.0636 │ ╘════════════╧═════════════╧══════════════╛ Code import torch import numpy as np import matplotlib.pyplot as plt from torch.distributions import Normal import seaborn as sns # Set random seed for reproducibility torch.manual_seed(42) np.random.seed(42) # Define parameters for two normal distributions def setup_distributions(mu_theta=0.0, sigma_theta=1.0, mu_ref=1.0, sigma_ref=1.1): # Create trainable parameters mu_theta_param = torch.tensor(mu_theta, requires_grad=True) sigma_theta_param = torch.tensor(sigma_theta, requires_grad=True) # Reference distribution parameters (fixed) mu_ref_param = torch.tensor(mu_ref) sigma_ref_param = torch.tensor(sigma_ref) # Create distributions pi_theta = Normal(mu_theta_param, sigma_theta_param) pi_ref = Normal(mu_ref_param, sigma_ref_param) return pi_theta, pi_ref, mu_theta_param, sigma_theta_param # Calculate the true KL divergence (analytical solution for normal distributions) def true_kl_divergence(pi_theta, pi_ref): mu_theta = pi_theta.loc sigma_theta = pi_theta.scale mu_ref = pi_ref.loc sigma_ref = pi_ref.scale kl = (torch.log(sigma_ref/sigma_theta) + (sigma_theta**2 + (mu_theta - mu_ref)**2)/(2*sigma_ref**2) - 0.5) rkl = (torch.log(sigma_theta/sigma_ref) + (sigma_ref**2 + (mu_ref - mu_theta)**2)/(2*sigma_theta**2) - 0.5) return kl, rkl # Three different KL divergence estimates def k1_loss(x, pi_theta, pi_ref): return pi_theta.log_prob(x) - pi_ref.log_prob(x) def k2_loss(x, pi_theta, pi_ref): return 0.5 * (pi_theta.log_prob(x) - pi_ref.log_prob(x))**2 def k3_loss(x, pi_theta, pi_ref): ratio = torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) return ratio - 1 - torch.log(ratio) # Two different reverse KL divergence estimates def reverse_k1_loss(x, pi_theta, pi_ref): ratio = torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) return ratio * (pi_ref.log_prob(x) - pi_theta.log_prob(x)) def reverse_k2_loss(x, pi_theta, pi_ref): return torch.exp(pi_ref.log_prob(x) - pi_theta.log_prob(x)) # Sample and compute gradients def estimate_gradients(sample_size=10000, num_trials=10): pi_theta, pi_ref, mu_param, sigma_param = setup_distributions() # Compute the gradient of the true and reverse KL divergence true_kl, true_reverse_kl = true_kl_divergence(pi_theta, pi_ref) true_kl.backward() true_grad_mu = mu_param.grad.item() true_grad_sigma = sigma_param.grad.item() mu_param.grad.zero_() sigma_param.grad.zero_() true_reverse_kl.backward() true_reverse_grad_mu = mu_param.grad.item() true_reverse_grad_sigma = sigma_param.grad.item() mu_param.grad.zero_() sigma_param.grad.zero_() # Store gradients from different estimates k1_grads_mu = [] k1_grads_sigma = [] k2_grads_mu = [] k2_grads_sigma = [] k3_grads_mu = [] k3_grads_sigma = [] reverse_k1_grads_mu = [] reverse_k1_grads_sigma = [] reverse_k2_grads_mu = [] reverse_k2_grads_sigma = [] for _ in range(num_trials): pi_theta, pi_ref, mu_param, sigma_param = setup_distributions() # Sample from the current policy samples = pi_theta.sample((sample_size,)) # Get gradient of KL estimation k1_values = k1_loss(samples, pi_theta, pi_ref) k1_mean = k1_values.mean() k1_mean.backward() k1_grads_mu.append(mu_param.grad.item()) k1_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() k2_values = k2_loss(samples, pi_theta, pi_ref) k2_mean = k2_values.mean() k2_mean.backward() k2_grads_mu.append(mu_param.grad.item()) k2_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() k3_values = k3_loss(samples, pi_theta, pi_ref) k3_mean = k3_values.mean() k3_mean.backward() k3_grads_mu.append(mu_param.grad.item()) k3_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() reverse_k1_values = reverse_k1_loss(samples, pi_theta, pi_ref) reverse_k1_mean = reverse_k1_values.mean() reverse_k1_mean.backward() reverse_k1_grads_mu.append(mu_param.grad.item()) reverse_k1_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() reverse_k2_values = reverse_k2_loss(samples, pi_theta, pi_ref) reverse_k2_mean = reverse_k2_values.mean() reverse_k2_mean.backward() reverse_k2_grads_mu.append(mu_param.grad.item()) reverse_k2_grads_sigma.append(sigma_param.grad.item()) mu_param.grad.zero_() sigma_param.grad.zero_() return { 'true_grad_mu': true_grad_mu, 'true_grad_sigma': true_grad_sigma, 'k1_grads_mu': k1_grads_mu, 'k1_grads_sigma': k1_grads_sigma, 'k2_grads_mu': k2_grads_mu, 'k2_grads_sigma': k2_grads_sigma, 'k3_grads_mu': k3_grads_mu, 'k3_grads_sigma': k3_grads_sigma, 'true_reverse_grad_mu': true_reverse_grad_mu, 'true_reverse_grad_sigma': true_reverse_grad_sigma, 'reverse_k1_grads_mu': reverse_k1_grads_mu, 'reverse_k1_grads_sigma': reverse_k1_grads_sigma, 'reverse_k2_grads_mu': reverse_k2_grads_mu, 'reverse_k2_grads_sigma': reverse_k2_grads_sigma } def create_nice_table(results): true_grad_mu = results['true_grad_mu'] true_grad_sigma = results['true_grad_sigma'] true_reverse_grad_mu = results['true_reverse_grad_mu'] true_reverse_grad_sigma = results['true_reverse_grad_sigma'] k1_bias_mu = abs(np.mean(results['k1_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k2_bias_mu = abs(np.mean(results['k2_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k3_bias_mu = abs(np.mean(results['k3_grads_mu']) - true_grad_mu) / abs(true_grad_mu) k1_std_mu = np.std(results['k1_grads_mu']) / abs(true_grad_mu) k2_std_mu = np.std(results['k2_grads_mu']) / abs(true_grad_mu) k3_std_mu = np.std(results['k3_grads_mu']) / abs(true_grad_mu) k1_bias_sigma = abs(np.mean(results['k1_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k2_bias_sigma = abs(np.mean(results['k2_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k3_bias_sigma = abs(np.mean(results['k3_grads_sigma']) - true_grad_sigma) / abs(true_grad_sigma) k1_std_sigma = np.std(results['k1_grads_sigma']) / abs(true_grad_sigma) k2_std_sigma = np.std(results['k2_grads_sigma']) / abs(true_grad_sigma) k3_std_sigma = np.std(results['k3_grads_sigma']) / abs(true_grad_sigma) reverse_k1_bias_mu = abs(np.mean(results['reverse_k1_grads_mu']) - true_reverse_grad_mu) / abs(true_reverse_grad_mu) reverse_k2_bias_mu = abs(np.mean(results['reverse_k2_grads_mu']) - true_reverse_grad_mu) / abs(true_reverse_grad_mu) reverse_k1_std_mu = np.std(results['reverse_k1_grads_mu']) / abs(true_reverse_grad_mu) reverse_k2_std_mu = np.std(results['reverse_k2_grads_mu']) / abs(true_reverse_grad_mu) reverse_k1_bias_sigma = abs(np.mean(results['reverse_k1_grads_sigma']) - true_reverse_grad_sigma) / abs(true_reverse_grad_sigma) reverse_k2_bias_sigma = abs(np.mean(results['reverse_k2_grads_sigma']) - true_reverse_grad_sigma) / abs(true_reverse_grad_sigma) reverse_k1_std_sigma = np.std(results['reverse_k1_grads_sigma']) / abs(true_reverse_grad_sigma) reverse_k2_std_sigma = np.std(results['reverse_k2_grads_sigma']) / abs(true_reverse_grad_sigma) # Create table from tabulate import tabulate import pandas as pd df_mu = pd.DataFrame({ 'bias/true': [k1_bias_mu, k2_bias_mu, k3_bias_mu], 'stdev/true': [k1_std_mu, k2_std_mu, k3_std_mu] }, index=['k1', 'k2', 'k3']) df_reverse_mu = pd.DataFrame({ 'bias/true': [reverse_k1_bias_mu, reverse_k2_bias_mu], 'stdev/true': [reverse_k1_std_mu, reverse_k2_std_mu] }, index=['reverse_k1', 'reverse_k2']) df_sigma = pd.DataFrame({ 'bias/true': [k1_bias_sigma, k2_bias_sigma, k3_bias_sigma], 'stdev/true': [k1_std_sigma, k2_std_sigma, k3_std_sigma] }, index=['k1', 'k2', 'k3']) df_reverse_sigma = pd.DataFrame({ 'bias/true': [reverse_k1_bias_sigma, reverse_k2_bias_sigma], 'stdev/true': [reverse_k1_std_sigma, reverse_k2_std_sigma] }, index=['reverse_k1', 'reverse_k2']) # Format values df_mu = df_mu.round(4) df_sigma = df_sigma.round(4) df_reverse_mu = df_reverse_mu.round(4) df_reverse_sigma = df_reverse_sigma.round(4) # Print nice table print(\"KL - Comparison of bias and standard deviation for mean parameter gradients:\") print(tabulate(df_mu, headers='keys', tablefmt='fancy_grid')) print(\"\\nKL - Comparison of bias and standard deviation for standard deviation parameter gradients:\") print(tabulate(df_sigma, headers='keys', tablefmt='fancy_grid')) print(\"\\nReverse KL - Comparison of bias and standard deviation for mean parameter gradients:\") print(tabulate(df_reverse_mu, headers='keys', tablefmt='fancy_grid')) print(\"\\nReverse KL - Comparison of bias and standard deviation for standard deviation parameter gradients:\") print(tabulate(df_reverse_sigma, headers='keys', tablefmt='fancy_grid')) return df_mu, df_sigma, df_reverse_mu, df_reverse_sigma def visualize_results(results): fig, axes = plt.subplots(2, 2, figsize=(16, 12)) axes[0,0].axhline(y=results['true_grad_mu'], color='r', linestyle='-', label='True KL') sns.violinplot(data=[results['k1_grads_mu'], results['k2_grads_mu'], results['k3_grads_mu']], ax=axes[0,0]) axes[0,0].set_title('Gradient of KL Divergence with Respect to Mean Parameter') axes[0,0].set_xticks([0,1,2]) axes[0,0].set_xticklabels(['k1', 'k2', 'k3']) axes[0,0].set_ylabel('Gradient Value') axes[0,0].legend() axes[0,1].axhline(y=results['true_grad_sigma'], color='r', linestyle='-', label='True KL') sns.violinplot(data=[results['k1_grads_sigma'], results['k2_grads_sigma'], results['k3_grads_sigma']], ax=axes[0,1]) axes[0,1].set_title('Gradient of KL Divergence with Respect to Standard Deviation Parameter') axes[0,1].set_xticks([0,1,2]) axes[0,1].set_xticklabels(['k1', 'k2', 'k3']) axes[0,1].set_ylabel('Gradient Value') axes[0,1].legend() axes[1,0].axhline(y=results['true_reverse_grad_mu'], color='r', linestyle='-', label='True Reverse KL') sns.violinplot(data=[results['reverse_k1_grads_mu'], results['reverse_k2_grads_mu']], ax=axes[1,0]) axes[1,0].set_title('Gradient of Reverse KL Divergence with Respect to Mean Parameter') axes[1,0].set_xticks([0,1]) axes[1,0].set_xticklabels(['reverse_k1', 'reverse_k2']) axes[1,0].set_ylabel('Gradient Value') axes[1,0].legend() axes[1,1].axhline(y=results['true_reverse_grad_sigma'], color='r', linestyle='-', label='True Reverse KL') sns.violinplot(data=[results['reverse_k1_grads_sigma'], results['reverse_k2_grads_sigma']], ax=axes[1,1]) axes[1,1].set_title('Gradient of Reverse KL Divergence with Respect to Standard Deviation Parameter') axes[1,1].set_xticks([0,1]) axes[1,1].set_xticklabels(['reverse_k1', 'reverse_k2']) axes[1,1].set_ylabel('Gradient Value') axes[1,1].legend() plt.tight_layout() plt.show() # Print mean comparison print(\"Average gradient value comparison (mean parameter):\") print(f\"True KL gradient: {results['true_grad_mu']:.6f}\") print(f\"k1 average gradient: {np.mean(results['k1_grads_mu']):.6f}\") print(f\"k2 average gradient: {np.mean(results['k2_grads_mu']):.6f}\") print(f\"k3 average gradient: {np.mean(results['k3_grads_mu']):.6f}\") print(\"\\nAverage gradient value comparison (standard deviation parameter):\") print(f\"True KL gradient: {results['true_grad_sigma']:.6f}\") print(f\"k1 average gradient: {np.mean(results['k1_grads_sigma']):.6f}\") print(f\"k2 average gradient: {np.mean(results['k2_grads_sigma']):.6f}\") print(f\"k3 average gradient: {np.mean(results['k3_grads_sigma']):.6f}\") print(\"\\nReverse KL - Average gradient value comparison (mean parameter):\") print(f\"True Reverse KL gradient: {results['true_reverse_grad_mu']:.6f}\") print(f\"reverse_k1 average gradient: {np.mean(results['reverse_k1_grads_mu']):.6f}\") print(f\"reverse_k2 average gradient: {np.mean(results['reverse_k2_grads_mu']):.6f}\") print(\"\\nReverse KL - Average gradient value comparison (standard deviation parameter):\") print(f\"True Reverse KL gradient: {results['true_reverse_grad_sigma']:.6f}\") print(f\"reverse_k1 average gradient: {np.mean(results['reverse_k1_grads_sigma']):.6f}\") print(f\"reverse_k2 average gradient: {np.mean(results['reverse_k2_grads_sigma']):.6f}\") # Add nice table output print() df = create_nice_table(results) if __name__ == \"__main__\": sample_size = 50000 num_trials = 1000 results = estimate_gradients(sample_size, num_trials) visualize_results(results) Additional Notes The variance reduction approach for k2 loss can follow Schulman (2020)’s analysis by introducing a zero-mean statistic and solving with the method of undetermined coefficients.\nFirst, solve for $\\theta$ component-wise:\n$$ \\begin{align*} \\lambda_i^* \u0026= \\argmin_\\lambda E_{X\\sim\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2 \\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right) - \\lambda\\right)^2\\right]\\\\ \u0026= \\frac{E_{\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2\\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X)}{\\pi_{ref}(X)}\\right)\\right)^2\\right]}{E_{\\pi_\\theta}\\left[(\\nabla_{\\theta_i}\\log\\pi_{\\theta}(X))^2\\right]}. \\end{align*} $$\nThen apply the modified estimator component-wise,\n$$ \\nabla_{\\theta_i} = \\nabla_{\\theta_i} \\frac{1}{2}(\\log\\pi_\\theta(X) - \\log\\pi_{ref}(X) - \\lambda_i^*)^2. $$\nHowever, this approach is quite complicated. First, $\\lambda$ is difficult to estimate as it requires computing the score (log prob gradient) first, potentially necessitating two backward passes. Second, each component needs to be estimated separately.\nAs an alternative, we could consider using the previous step’s score and a single $\\lambda$ estimator:\n$$ \\hat{\\lambda}^* = \\frac{\\sum_i|\\nabla_{\\theta_{old}}\\log\\pi_{\\theta}(X_i)|_2^2\\cdot \\left(\\log\\left(\\frac{\\pi_\\theta(X_i)}{\\pi_{ref}(X_i)}\\right)\\right)^2}{\\sum_i|\\nabla_{\\theta_{old}}\\log\\pi_{\\theta}(X_i)|_2^2}. $$\nHowever, this remains complex as it requires per-sample gradient norms and introduces some bias, which may not be worth the effort. The effectiveness of KL loss itself is uncertain, and whether additional variance reduction is needed here is debatable - perhaps k2 is already sufficient.\nCitation Please cite this work as:\nYang, Xiaobo. (Mar 2025). Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning. Xiabo’s Blog.\nhttps://xiaobo-yang.github.io/posts/kl_grad/.\nOr in BibTeX format:\n@article{yang2025klgradient, title = \"Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning.\", author = \"Yang, Xiaobo\", journal = \"xiaobo-yang.github.io\", year = \"2025\", month = \"Mar\", url = \"https://xiaobo-yang.github.io/posts/kl_grad/\" } References [1] John Schulman “Approximating KL Divergence.” 2020.\n[2] Guo et al. “DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning” 2025.\n",
+  "wordCount" : "2021",
+  "inLanguage": "en",
   "datePublished": "2025-03-14T00:00:00Z",
   "dateModified": "2025-03-14T00:00:00Z",
   "author":{
@@ -179,11 +130,11 @@ $$">
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/"
+    "@id": "https://xiaobo-yang.github.io/posts/kl_grad/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "潇博的博客",
+    "name": "Xiaobo's Blog",
     "logo": {
       "@type": "ImageObject",
       "url": "https://xiaobo-yang.github.io/favicon.ico"
@@ -208,9 +159,9 @@ $$">
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://xiaobo-yang.github.io/zh/" accesskey="h" title="潇博的博客 (Alt + H)">
+            <a href="https://xiaobo-yang.github.io/" accesskey="h" title="Xiaobo&#39;s Blog (Alt + H)">
                 <img src="https://xiaobo-yang.github.io/logo.svg" alt="" aria-label="logo"
-                    height="27">潇博的博客</a>
+                    height="27">Xiaobo&#39;s Blog</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -234,36 +185,36 @@ $$">
                 </button>
                 <ul class="lang-switch"><li>|</li>
                     <li>
-                        <a href="https://xiaobo-yang.github.io/" title="English"
-                            aria-label="English">English</a>
+                        <a href="https://xiaobo-yang.github.io/zh/" title="中文"
+                            aria-label="中文">中文</a>
                     </li>
                 </ul>
             </div>
         </div>
         <ul id="menu">
             <li>
-                <a href="https://xiaobo-yang.github.io/zh/" title="文章">
-                    <span>文章</span>
+                <a href="https://xiaobo-yang.github.io/" title="Posts">
+                    <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="https://xiaobo-yang.github.io/zh/archive-zh/" title="目录">
-                    <span>目录</span>
+                <a href="https://xiaobo-yang.github.io/archive/" title="Archive">
+                    <span>Archive</span>
                 </a>
             </li>
             <li>
-                <a href="https://xiaobo-yang.github.io/zh/search-zh/" title="搜索 (Alt &#43; /)" accesskey=/>
-                    <span>搜索</span>
+                <a href="https://xiaobo-yang.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
                 </a>
             </li>
             <li>
-                <a href="https://xiaobo-yang.github.io/zh/tags/" title="标签">
-                    <span>标签</span>
+                <a href="https://xiaobo-yang.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
             <li>
-                <a href="https://xiaobo-yang.github.io/zh/contact-zh/" title="联系">
-                    <span>联系</span>
+                <a href="https://xiaobo-yang.github.io/contact/" title="Contact">
+                    <span>Contact</span>
                 </a>
             </li>
         </ul>
@@ -275,49 +226,49 @@ $$">
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      大模型强化学习训练中KL散度的梯度估计
+      Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning
     </h1>
-    <div class="post-meta"><span title='2025-03-14 00:00:00 +0000 UTC'>三月 14, 2025</span>&nbsp;·&nbsp;8 分钟&nbsp;·&nbsp;1607 字&nbsp;·&nbsp;Xiaobo Yang
+    <div class="post-meta"><span title='2025-03-14 00:00:00 +0000 UTC'>March 14, 2025</span>&nbsp;·&nbsp;10 min&nbsp;·&nbsp;2021 words&nbsp;·&nbsp;Xiaobo Yang
 
 </div>
   </header> <div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
-            <span class="details">目录</span>
+            <span class="details">Table of Contents</span>
         </summary>
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#%e7%90%86%e8%ae%ba" aria-label="理论">理论</a></li>
+                    <a href="#theory" aria-label="Theory">Theory</a></li>
                 <li>
-                    <a href="#%e5%ae%9e%e9%aa%8c" aria-label="实验">实验</a><ul>
+                    <a href="#experiments" aria-label="Experiments">Experiments</a><ul>
                         
                 <li>
-                    <a href="#%e5%ae%9e%e9%aa%8c%e4%bb%a3%e7%a0%81" aria-label="实验代码">实验代码</a></li></ul>
+                    <a href="#code" aria-label="Code">Code</a></li></ul>
                 </li>
                 <li>
-                    <a href="#%e8%a1%a5%e5%85%85" aria-label="补充">补充</a></li>
+                    <a href="#additional-notes" aria-label="Additional Notes">Additional Notes</a></li>
                 <li>
-                    <a href="#%e5%bc%95%e7%94%a8" aria-label="引用">引用</a></li>
+                    <a href="#citation" aria-label="Citation">Citation</a></li>
                 <li>
-                    <a href="#%e5%8f%82%e8%80%83" aria-label="参考">参考</a>
+                    <a href="#references" aria-label="References">References</a>
                 </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><h1 id="理论">理论<a hidden class="anchor" aria-hidden="true" href="#理论">#</a></h1>
-<p>在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.</p>
-<p><a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a> 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 <a href="https://arxiv.org/abs/2501.12948">(Guo et al. 2025)</a> 就使用了这种方式:</p>
+  <div class="post-content"><h1 id="theory">Theory<a hidden class="anchor" aria-hidden="true" href="#theory">#</a></h1>
+<p>In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.</p>
+<p><a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a> proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&rsquo;s GRPO algorithm <a href="https://arxiv.org/abs/2501.12948">(Guo et al. 2025)</a> adopted this approach:</p>
 <figure>
     <img loading="lazy" src="/figs/kl_in_r1_paper.png"
-         alt="Fig. 1. GRPO 算法. (来源：Guo et al. 2025)"/> <figcaption>
-            <p>Fig. 1. GRPO 算法. (来源：<a href="https://arxiv.org/abs/2501.12948">Guo et al. 2025</a>)</p>
+         alt="Fig. 1. GRPO Algorithm. (Source: Guo et al. 2025)"/> <figcaption>
+            <p>Fig. 1. GRPO Algorithm. (Source: <a href="https://arxiv.org/abs/2501.12948">Guo et al. 2025</a>)</p>
         </figcaption>
 </figure>
 
-<p>不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和<a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a> 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：</p>
+<p>However, when using KL Loss, we actually estimate the gradient of KL divergence through sampling, which differs somewhat from <a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a>&rsquo;s analysis. In training, after constructing the estimator, we directly use it as a loss for backpropagation, hoping it remains a good approximation:</p>
 <p>$$
 \begin{align*}
 \nabla_\theta \widehat{\operatorname{KL}}(X)
@@ -327,13 +278,13 @@ $$">
 &amp;=E_{x\sim\pi_\theta}\left[\nabla_\theta\log\pi_\theta(X)\cdot\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right].
 \end{align*}
 $$</p>
-<p>但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，</p>
+<p>However, the gradient of an unbiased KL estimator is not necessarily an unbiased estimator of the KL gradient:</p>
 <p>$$
 E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)]
 \neq \nabla_\theta E_{\pi_\theta}[ \widehat{\operatorname{KL}}(X)]
 = \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}}).
 $$</p>
-<p>事实上，他们之间差了一项：</p>
+<p>In fact, they differ by one term:</p>
 <p>$$
 \begin{align*}
 \nabla_\theta E_{\pi_\theta}[f_\theta(X)]
@@ -342,7 +293,7 @@ $$</p>
 &amp;= E_{\pi_\theta}[\nabla_\theta\log\pi_\theta(X)\cdot f_\theta(X)] + E_{\pi_\theta}[\nabla_\theta f_\theta(X)].
 \end{align*}
 $$</p>
-<p>对于policy生成的样本 $X\sim\pi_\theta(\cdot)$，分别取 $\widehat{\operatorname{KL}}$ 为k1、k2、k3 loss可知，</p>
+<p>For samples $X\sim\pi_\theta(\cdot)$ generated by the policy, taking $\widehat{\operatorname{KL}}$ as k1, k2, and k3 loss respectively:</p>
 <ul>
 <li>
 <p>k1</p>
@@ -375,8 +326,8 @@ E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)] &amp;= E_{\pi_\thet
 $$</p>
 </li>
 </ul>
-<p><strong>可见，虽然k2 loss并不是kl的无偏估计，但其梯度是kl的梯度的无偏估计；而k1和k3则相反。值得注意的是，k1 loss的梯度的期望始终为0，在大的batch size条件下，这是平凡的。这也说明了GRPO算法中采用的KL loss不是一个很好的估计量。</strong></p>
-<p>有时大家还会使用逆KL散度，它将policy model和reference model在KL散度的计算中交换位置。由于样本 $X$ 始终是从policy model中抽出，我们需要乘以一个probability ratio，</p>
+<p><strong>As we can see, although k2 loss is not an unbiased estimator of KL divergence, its gradient is an unbiased estimator of KL gradient; while k1 and k3 are the opposite. Notably, the expectation of k1 loss gradient is always zero, which becomes trivial under large batch sizes. This also indicates that the KL loss adopted in the GRPO algorithm is not a good estimator.</strong></p>
+<p>Sometimes people also use reverse KL divergence, which swaps the positions of policy model and reference model in the KL divergence calculation. Since samples $X$ are always drawn from the policy model, we need to multiply by a probability ratio:</p>
 <p>$$
 \begin{align*}
 \operatorname{KL}(\pi_{ref}||\pi_\theta)
@@ -402,11 +353,11 @@ $$</p>
 \right].
 \end{align*}
 $$</p>
-<p>于是，如果要在KL loss中估计其梯度，一个无偏估计可取</p>
+<p>Therefore, if we want to estimate its gradient in KL loss, an unbiased estimator can be:</p>
 <p>$$
 \widehat{\operatorname{KL}}(X) = \frac{\pi_{ref}(X) }{\pi_\theta(X)}.
 $$</p>
-<p>此时KL的无偏估计的梯度仍然不等于KL的梯度的无偏估计：</p>
+<p>In this case, the gradient of the unbiased KL estimator is still not equal to the unbiased estimator of KL gradient:</p>
 <p>$$
 \begin{align*}
 \widehat{\operatorname{KL}}(X)
@@ -425,12 +376,12 @@ E_{X\sim\pi_{\theta}}[\nabla_\theta \widehat{\operatorname{KL}}(X)]
 = \nabla_\theta \operatorname{KL}(\pi_{ref}||\pi_\theta).
 \end{align*}
 $$</p>
-<h1 id="实验">实验<a hidden class="anchor" aria-hidden="true" href="#实验">#</a></h1>
-<p>考虑 $\pi_\theta=\mathcal{N}(0,1),~\pi_{ref}=\mathcal{N}(1,1.1)$，参数 $\theta$ 为高斯分布的均值和标准差，估计结果与理论分析一致：</p>
+<h1 id="experiments">Experiments<a hidden class="anchor" aria-hidden="true" href="#experiments">#</a></h1>
+<p>Consider $\pi_\theta=\mathcal{N}(0,1),~\pi_{ref}=\mathcal{N}(1,1.1)$, where parameter $\theta$ represents the mean and standard deviation of the Gaussian distribution. The experimental results align with theoretical analysis:</p>
 <figure>
     <img loading="lazy" src="/figs/kl_grad.png"
-         alt="Fig. 2. KL估计实验结果"/> <figcaption>
-            <p>Fig. 2. KL估计实验结果</p>
+         alt="Fig. 2. Gradient Estimation of KL"/> <figcaption>
+            <p>Fig. 2. Gradient Estimation of KL</p>
         </figcaption>
 </figure>
 
@@ -495,7 +446,7 @@ $$</p>
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">├────────────┼─────────────┼──────────────┤</span>
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">│ reverse_k2 │      0.0008 │       0.0636 │</span>
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">╘════════════╧═════════════╧══════════════╛</span>
-</span></span></code></pre></div><h2 id="实验代码">实验代码<a hidden class="anchor" aria-hidden="true" href="#实验代码">#</a></h2>
+</span></span></code></pre></div><h2 id="code">Code<a hidden class="anchor" aria-hidden="true" href="#code">#</a></h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
@@ -790,9 +741,9 @@ $$</p>
 </span></span><span style="display:flex;"><span>    num_trials <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
 </span></span><span style="display:flex;"><span>    results <span style="color:#f92672">=</span> estimate_gradients(sample_size, num_trials)
 </span></span><span style="display:flex;"><span>    visualize_results(results)
-</span></span></code></pre></div><h1 id="补充">补充<a hidden class="anchor" aria-hidden="true" href="#补充">#</a></h1>
-<p>k2 loss方差减小的思路，可以模仿 <a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a> 的分析，代入一个零均值统计量，待定系数法求解。</p>
-<p>首先对 $\theta$ 逐分量求解，</p>
+</span></span></code></pre></div><h1 id="additional-notes">Additional Notes<a hidden class="anchor" aria-hidden="true" href="#additional-notes">#</a></h1>
+<p>The variance reduction approach for k2 loss can follow <a href="http://joschu.net/blog/kl-approx.html">Schulman (2020)</a>&rsquo;s analysis by introducing a zero-mean statistic and solving with the method of undetermined coefficients.</p>
+<p>First, solve for $\theta$ component-wise:</p>
 <p>$$
 \begin{align*}
 \lambda_i^*
@@ -800,23 +751,23 @@ $$</p>
 &amp;= \frac{E_{\pi_\theta}\left[(\nabla_{\theta_i}\log\pi_{\theta}(X))^2\cdot \left(\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right)^2\right]}{E_{\pi_\theta}\left[(\nabla_{\theta_i}\log\pi_{\theta}(X))^2\right]}.
 \end{align*}
 $$</p>
-<p>然后逐分量使用修正后的估计量，</p>
+<p>Then apply the modified estimator component-wise,</p>
 <p>$$
 \nabla_{\theta_i} = \nabla_{\theta_i} \frac{1}{2}(\log\pi_\theta(X) - \log\pi_{ref}(X) - \lambda_i^*)^2.
 $$</p>
-<p>然而这样却很麻烦。首先 $\lambda$ 很难估计，需要先得到score（log prob梯度）才能计算，故可能需要两次backward；其次，每个分量都要单独估计。</p>
-<p>作为替代，可考虑使用上一步的score以及单个 $\lambda$ 估计量，</p>
+<p>However, this approach is quite complicated. First, $\lambda$ is difficult to estimate as it requires computing the score (log prob gradient) first, potentially necessitating two backward passes. Second, each component needs to be estimated separately.</p>
+<p>As an alternative, we could consider using the previous step&rsquo;s score and a single $\lambda$ estimator:</p>
 <p>$$
 \hat{\lambda}^* = \frac{\sum_i|\nabla_{\theta_{old}}\log\pi_{\theta}(X_i)|_2^2\cdot \left(\log\left(\frac{\pi_\theta(X_i)}{\pi_{ref}(X_i)}\right)\right)^2}{\sum_i|\nabla_{\theta_{old}}\log\pi_{\theta}(X_i)|_2^2}.
 $$</p>
-<p>不过这样仍然较为复杂，需要使用逐样本的grad norm，并且已经引入了一些bias，未必合算。KL loss本身起到的作用也未可知，是否需要在这里做额外的方差减小有待商榷，或许k2即足够。</p>
-<h1 id="引用">引用<a hidden class="anchor" aria-hidden="true" href="#引用">#</a></h1>
-<p>引用格式如下：</p>
+<p>However, this remains complex as it requires per-sample gradient norms and introduces some bias, which may not be worth the effort. The effectiveness of KL loss itself is uncertain, and whether additional variance reduction is needed here is debatable - perhaps k2 is already sufficient.</p>
+<h1 id="citation">Citation<a hidden class="anchor" aria-hidden="true" href="#citation">#</a></h1>
+<p>Please cite this work as:</p>
 <blockquote>
 <p>Yang, Xiaobo. (Mar 2025). Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning. Xiabo&rsquo;s Blog.<br>
 <a href="https://xiaobo-yang.github.io/posts/kl_grad/">https://xiaobo-yang.github.io/posts/kl_grad/</a>.</p>
 </blockquote>
-<p>或者使用BibTeX格式：</p>
+<p>Or in BibTeX format:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bibtex" data-lang="bibtex"><span style="display:flex;"><span><span style="color:#a6e22e">@article</span>{yang2025klgradient,
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">title</span> = <span style="color:#e6db74">&#34;Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning.&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">author</span> = <span style="color:#e6db74">&#34;Yang, Xiaobo&#34;</span>,
@@ -825,8 +776,8 @@ $$</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">month</span> = <span style="color:#e6db74">&#34;Mar&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">url</span> = <span style="color:#e6db74">&#34;https://xiaobo-yang.github.io/posts/kl_grad/&#34;</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h1 id="参考">参考<a hidden class="anchor" aria-hidden="true" href="#参考">#</a></h1>
-<p>[1] John Schulman <a href="http://joschu.net/blog/kl-approx.html">“Approximating KL Divergence.”</a> 2020.</p>
+</span></span></code></pre></div><h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>[1] John Schulman <a href="http://joschu.net/blog/kl-approx.html">&ldquo;Approximating KL Divergence.&rdquo;</a> 2020.</p>
 <p>[2] Guo et al. <a href="https://arxiv.org/abs/2501.12948">&ldquo;DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning&rdquo;</a> 2025.</p>
 
 
@@ -834,14 +785,14 @@ $$</p>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://xiaobo-yang.github.io/zh/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+      <li><a href="https://xiaobo-yang.github.io/tags/reinforcement-learning/">Reinforcement Learning</a></li>
     </ul>
 
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on x"
-            href="https://x.com/intent/tweet/?text=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f&amp;hashtags=ReinforcementLearning">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on x"
+            href="https://x.com/intent/tweet/?text=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f&amp;hashtags=ReinforcementLearning">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
@@ -849,8 +800,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f&amp;title=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1&amp;summary=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1&amp;source=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f&amp;title=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning&amp;summary=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning&amp;source=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -858,8 +809,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f&title=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f&title=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -867,8 +818,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
@@ -876,8 +827,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on whatsapp"
-            href="https://api.whatsapp.com/send?text=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1%20-%20https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on whatsapp"
+            href="https://api.whatsapp.com/send?text=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning%20-%20https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
@@ -885,8 +836,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on telegram"
-            href="https://telegram.me/share/url?text=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on telegram"
+            href="https://telegram.me/share/url?text=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning&amp;url=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f">
             <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
@@ -894,8 +845,8 @@ $$</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share 大模型强化学习训练中KL散度的梯度估计 on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=%e5%a4%a7%e6%a8%a1%e5%9e%8b%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e8%ae%ad%e7%bb%83%e4%b8%adKL%e6%95%a3%e5%ba%a6%e7%9a%84%e6%a2%af%e5%ba%a6%e4%bc%b0%e8%ae%a1&u=https%3a%2f%2fxiaobo-yang.github.io%2fzh%2fposts%2fkl_grad_zh%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Gradient%20Estimation%20of%20KL%20Divergence%20in%20Large%20Language%20Model%20Reinforcement%20Learning&u=https%3a%2f%2fxiaobo-yang.github.io%2fposts%2fkl_grad%2f">
             <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
                 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
                 <path
@@ -910,7 +861,7 @@ $$</p>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://xiaobo-yang.github.io/zh/">潇博的博客</a></span> · 
+        <span>&copy; 2025 <a href="https://xiaobo-yang.github.io/">Xiaobo&#39;s Blog</a></span> · 
 
     <span>
         Powered by
@@ -984,12 +935,12 @@ $$</p>
 
         const copybutton = document.createElement('button');
         copybutton.classList.add('copy-code');
-        copybutton.innerHTML = '复制';
+        copybutton.innerHTML = 'copy';
 
         function copyingDone() {
-            copybutton.innerHTML = '已复制！';
+            copybutton.innerHTML = 'copied!';
             setTimeout(() => {
-                copybutton.innerHTML = '复制';
+                copybutton.innerHTML = 'copy';
             }, 2000);
         }
 

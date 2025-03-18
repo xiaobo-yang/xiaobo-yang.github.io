@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>潇博的博客</title>
-    <link>http://localhost:1313/zh/</link>
+    <link>https://xiaobo-yang.github.io/zh/</link>
     <description>Recent content on 潇博的博客</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xiaobo-yang.github.io/zh/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>大模型强化学习训练中KL散度的梯度估计</title>
-      <link>http://localhost:1313/zh/posts/kl_grad_zh/</link>
+      <link>https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/</link>
       <pubDate>Fri, 14 Mar 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/zh/posts/kl_grad_zh/</guid>
+      <guid>https://xiaobo-yang.github.io/zh/posts/kl_grad_zh/</guid>
       <description>&lt;h1 id=&#34;理论&#34;&gt;理论&lt;/h1&gt;
 &lt;p&gt;在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://joschu.net/blog/kl-approx.html&#34;&gt;Schulman (2020)&lt;/a&gt; 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 &lt;a href=&#34;https://arxiv.org/abs/2501.12948&#34;&gt;(Guo et al. 2025)&lt;/a&gt; 就使用了这种方式:&lt;/p&gt;
 &lt;figure&gt;
-    &lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/figs/kl_in_r1_paper.png&#34;
+    &lt;img loading=&#34;lazy&#34; src=&#34;https://xiaobo-yang.github.io/figs/kl_in_r1_paper.png&#34;
          alt=&#34;Fig. 1. GRPO 算法. (来源：Guo et al. 2025)&#34;/&gt; &lt;figcaption&gt;
             &lt;p&gt;Fig. 1. GRPO 算法. (来源：&lt;a href=&#34;https://arxiv.org/abs/2501.12948&#34;&gt;Guo et al. 2025&lt;/a&gt;)&lt;/p&gt;
         &lt;/figcaption&gt;
@@ -42,9 +42,9 @@ $$&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/zh/contact-zh/</link>
+      <link>https://xiaobo-yang.github.io/zh/contact-zh/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/zh/contact-zh/</guid>
+      <guid>https://xiaobo-yang.github.io/zh/contact-zh/</guid>
       <description>&lt;p&gt;如果你发现我的博客文章中有什么错误，或者想和我交流，我的邮箱是：1800010745@pku.edu.cn&lt;/p&gt;</description>
     </item>
   </channel>

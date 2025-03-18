@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Reinforcement Learning on Xiaobo&#39;s Blog</title>
-    <link>http://localhost:1313/tags/reinforcement-learning/</link>
+    <link>https://xiaobo-yang.github.io/tags/reinforcement-learning/</link>
     <description>Recent content in Reinforcement Learning on Xiaobo&#39;s Blog</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>en-US</language>
     <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/reinforcement-learning/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xiaobo-yang.github.io/tags/reinforcement-learning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning</title>
-      <link>http://localhost:1313/posts/kl_grad/</link>
+      <link>https://xiaobo-yang.github.io/posts/kl_grad/</link>
       <pubDate>Fri, 14 Mar 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/kl_grad/</guid>
+      <guid>https://xiaobo-yang.github.io/posts/kl_grad/</guid>
       <description>&lt;h1 id=&#34;theory&#34;&gt;Theory&lt;/h1&gt;
 &lt;p&gt;In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://joschu.net/blog/kl-approx.html&#34;&gt;Schulman (2020)&lt;/a&gt; proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&amp;rsquo;s GRPO algorithm &lt;a href=&#34;https://arxiv.org/abs/2501.12948&#34;&gt;(Guo et al. 2025)&lt;/a&gt; adopted this approach:&lt;/p&gt;</description>

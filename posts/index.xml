@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Xiaobo&#39;s Blog</title>
-    <link>https://xiaobo-yang.github.io/</link>
-    <description>Recent content on Xiaobo&#39;s Blog</description>
+    <title>Posts on Xiaobo&#39;s Blog</title>
+    <link>https://xiaobo-yang.github.io/posts/</link>
+    <description>Recent content in Posts on Xiaobo&#39;s Blog</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>en-US</language>
     <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://xiaobo-yang.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xiaobo-yang.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning</title>
       <link>https://xiaobo-yang.github.io/posts/kl_grad/</link>
@@ -16,13 +16,6 @@
       <description>&lt;h1 id=&#34;theory&#34;&gt;Theory&lt;/h1&gt;
 &lt;p&gt;In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://joschu.net/blog/kl-approx.html&#34;&gt;Schulman (2020)&lt;/a&gt; proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&amp;rsquo;s GRPO algorithm &lt;a href=&#34;https://arxiv.org/abs/2501.12948&#34;&gt;(Guo et al. 2025)&lt;/a&gt; adopted this approach:&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title></title>
-      <link>https://xiaobo-yang.github.io/contact/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xiaobo-yang.github.io/contact/</guid>
-      <description>&lt;p&gt;If you find any mistakes in my blog posts or want to get in touch, contact me at &lt;a href=&#34;mailto:1800010745@pku.edu.cn&#34;&gt;1800010745@pku.edu.cn&lt;/a&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
