@@ -2,62 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Xiaobo&#39;s Blog</title>
-    <link>https://xiaobo-yang.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Xiaobo&#39;s Blog</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 17 Dec 2024 16:38:21 +0800</lastBuildDate>
-    <atom:link href="https://xiaobo-yang.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Third</title>
-      <link>https://xiaobo-yang.github.io/posts/third/</link>
-      <pubDate>Tue, 17 Dec 2024 16:38:21 +0800</pubDate>
-      <guid>https://xiaobo-yang.github.io/posts/third/</guid>
-      <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;</description>
-    </item>
-    <item>
-      <title>Second</title>
-      <link>https://xiaobo-yang.github.io/posts/second/</link>
-      <pubDate>Tue, 17 Dec 2024 16:38:20 +0800</pubDate>
-      <guid>https://xiaobo-yang.github.io/posts/second/</guid>
-      <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-    </item>
-    <item>
-      <title>First</title>
-      <link>https://xiaobo-yang.github.io/posts/first/</link>
-      <pubDate>Tue, 17 Dec 2024 16:38:19 +0800</pubDate>
-      <guid>https://xiaobo-yang.github.io/posts/first/</guid>
-      <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test&lt;/p&gt;
-&lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-1&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-1&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-2&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-2&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-3&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-3&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-4&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-4&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-5&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-5&#34;&gt;Heading two&lt;/h2&gt;</description>
+      <title>Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning</title>
+      <link>http://localhost:1313/posts/kl_grad/</link>
+      <pubDate>Fri, 14 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/kl_grad/</guid>
+      <description>&lt;h1 id=&#34;theory&#34;&gt;Theory&lt;/h1&gt;
+&lt;p&gt;In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://joschu.net/blog/kl-approx.html&#34;&gt;Schulman (2020)&lt;/a&gt; proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek&amp;rsquo;s GRPO algorithm &lt;a href=&#34;https://arxiv.org/abs/2501.12948&#34;&gt;(Guo et al. 2025)&lt;/a&gt; adopted this approach:&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>https://xiaobo-yang.github.io/contact/</link>
+      <link>http://localhost:1313/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xiaobo-yang.github.io/contact/</guid>
-      <description>&lt;p&gt;contact me: &amp;hellip;&lt;/p&gt;</description>
+      <guid>http://localhost:1313/contact/</guid>
+      <description>&lt;p&gt;If you find any mistakes in my blog posts or want to get in touch, contact me at &lt;a href=&#34;mailto:1800010745@pku.edu.cn&#34;&gt;1800010745@pku.edu.cn&lt;/a&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

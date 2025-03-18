@@ -2,46 +2,65 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Test2 on Xiaobo&#39;s Blog</title>
-    <link>https://xiaobo-yang.github.io/tags/test2/</link>
+    <link>http://localhost:1313/tags/test2/</link>
     <description>Recent content in Test2 on Xiaobo&#39;s Blog</description>
     <generator>Hugo -- 0.139.5</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 17 Dec 2024 16:38:20 +0800</lastBuildDate>
-    <atom:link href="https://xiaobo-yang.github.io/tags/test2/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 17 Dec 2024 16:38:19 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/test2/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Second</title>
-      <link>https://xiaobo-yang.github.io/posts/second/</link>
-      <pubDate>Tue, 17 Dec 2024 16:38:20 +0800</pubDate>
-      <guid>https://xiaobo-yang.github.io/posts/second/</guid>
-      <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-    </item>
-    <item>
-      <title>First</title>
-      <link>https://xiaobo-yang.github.io/posts/first/</link>
+      <title>Introduction to Large Language Model</title>
+      <link>http://localhost:1313/tmp_posts/introduction_to_large_language_model/</link>
       <pubDate>Tue, 17 Dec 2024 16:38:19 +0800</pubDate>
-      <guid>https://xiaobo-yang.github.io/posts/first/</guid>
-      <description>&lt;h1 id=&#34;heading-one&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test&lt;/p&gt;
-&lt;h2 id=&#34;heading-two&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-1&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-1&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-2&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-2&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-3&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-3&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-4&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-4&#34;&gt;Heading two&lt;/h2&gt;
-&lt;h1 id=&#34;heading-one-5&#34;&gt;Heading one&lt;/h1&gt;
-&lt;p&gt;test for 2&lt;/p&gt;
-&lt;h2 id=&#34;heading-two-5&#34;&gt;Heading two&lt;/h2&gt;</description>
+      <guid>http://localhost:1313/tmp_posts/introduction_to_large_language_model/</guid>
+      <description>&lt;h1 id=&#34;llm-architecture&#34;&gt;LLM Architecture&lt;/h1&gt;
+&lt;h2 id=&#34;data-format&#34;&gt;Data Format&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Large Language Model (LLM)&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;💡 Feed prompts in, generate responses by predicting the next token.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Tokenization&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each word, subword, or character is mapped to an integer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Next token prediction&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Feature and label are shifted by one token&lt;/li&gt;
+&lt;li&gt;Feature: [batch size, seq len]&lt;/li&gt;
+&lt;li&gt;Label: [batch size, seq len]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Data Source&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Raw text data for pre-training&lt;/li&gt;
+&lt;li&gt;Instruction data for instruction tuning&lt;/li&gt;
+&lt;li&gt;Human preference data for RLHF&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;model-transformer-based-architecture&#34;&gt;Model: Transformer-based Architecture&lt;/h2&gt;
+&lt;h3 id=&#34;core-components&#34;&gt;Core Components&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Embedding&lt;/li&gt;
+&lt;li&gt;Attention Mechanism&lt;/li&gt;
+&lt;li&gt;MLP Layers&lt;/li&gt;
+&lt;li&gt;Layer Normalization&lt;/li&gt;
+&lt;li&gt;Residual Connections&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;llm-key-features&#34;&gt;LLM Key Features&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Decoder-only&lt;/li&gt;
+&lt;li&gt;Pre-LN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;embedding&#34;&gt;Embedding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Token embedding&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

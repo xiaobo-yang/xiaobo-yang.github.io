@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Reinforcement Learning | 潇博的博客</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Xiaobo Yang">
+<link rel="canonical" href="http://localhost:1313/zh/tags/reinforcement-learning/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.d4da565dc53861aa93341c7e9ece0447238abcb1162eb9007a3a9068422d0975.css" integrity="sha256-1NpWXcU4YaqTNBx&#43;ns4ERyOKvLEWLrkAejqQaEItCXU=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/zh/tags/reinforcement-learning/index.xml">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/tags/reinforcement-learning/">
+<link rel="alternate" hreflang="zh" href="http://localhost:1313/zh/tags/reinforcement-learning/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/zh/" accesskey="h" title="潇博的博客 (Alt + H)">
+                <img src="http://localhost:1313/logo.svg" alt="" aria-label="logo"
+                    height="27">潇博的博客</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                    <li>
+                        <a href="http://localhost:1313/" title="English"
+                            aria-label="English">English</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/zh/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/archive-zh/" title="目录">
+                    <span>目录</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/search-zh/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/zh/contact-zh/" title="联系">
+                    <span>联系</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    Reinforcement Learning
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">大模型强化学习训练中KL散度的梯度估计
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>理论 在大语言模型的强化学习训练中，有reward shaping和KL loss两种引入KL散度约束的方式，前者为直接对reward值加上kl估计，作为一个新的reward $r \leftarrow r - \beta\cdot KL$；另外一种为将KL估计量放到loss中，计算 $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$，一起进行反向传播.
+Schulman (2020) 给出了三种KL散度的估计方式，其中k3 loss被认为是兼备unbiased和low variance的好估计量。，DeepSeek的GRPO算法 (Guo et al. 2025) 就使用了这种方式:
+Fig. 1. GRPO 算法. (来源：Guo et al. 2025)
+不过，如果使用KL Loss，我们实际上是通过抽样来对KL散度的梯度做估计，这和Schulman (2020) 的分析有一些区别。在训练中，我们构建了估计量后，将其直接作为loss进行反向传播求导，期望这仍然是一个很好的逼近：
+$$ \begin{align*} \nabla_\theta \widehat{\operatorname{KL}}(X) &amp;\approx \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}})=\nabla_\theta \int \pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right)dx\\ &amp;= \int \nabla_\theta\pi_\theta(x)\cdot\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\nabla_\theta\log\pi_\theta(x)dx\\ &amp;=\int \pi_\theta(x)\cdot\nabla_\theta\log\pi_\theta(x)\log\left(\frac{\pi_\theta(x)}{\pi_{ref}(x)}\right) &#43; \pi_\theta(x)\cdot \frac{1}{\pi_\theta(x)}\nabla_\theta\pi_\theta(x)dx\\ &amp;=E_{x\sim\pi_\theta}\left[\nabla_\theta\log\pi_\theta(X)\cdot\log\left(\frac{\pi_\theta(X)}{\pi_{ref}(X)}\right)\right]. \end{align*} $$
+但KL的无偏估计的梯度，未必是KL的梯度的无偏估计，
+$$ E_{\pi_\theta}[\nabla_\theta \widehat{\operatorname{KL}}(X)] \neq \nabla_\theta E_{\pi_\theta}[ \widehat{\operatorname{KL}}(X)] = \nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{\theta_{ref}}). $$
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-03-14 00:00:00 +0000 UTC'>三月 14, 2025</span>&nbsp;·&nbsp;8 分钟&nbsp;·&nbsp;1607 字&nbsp;·&nbsp;Xiaobo Yang</footer>
+  <a class="entry-link" aria-label="post link to 大模型强化学习训练中KL散度的梯度估计" href="http://localhost:1313/zh/posts/kl_grad_zh/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/zh/">潇博的博客</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
