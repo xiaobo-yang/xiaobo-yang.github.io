@@ -15,6 +15,8 @@
 
   --serif:  "Source Serif 4", "Source Serif Pro", "EB Garamond",
             "Iowan Old Style", Cambria, Georgia, serif;
+  --display: "Fraunces", "Source Serif 4", "EB Garamond",
+             "Iowan Old Style", Georgia, serif;
   --sans:   Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
             sans-serif;
   --mono:   "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
@@ -104,14 +106,16 @@ a:hover { text-decoration-color: var(--accent); }
 }
 .masthead__author {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--display);
+  font-weight: 460;
   text-transform: none;
-  letter-spacing: 0.45em;
-  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  font-size: 1.1rem;
   color: var(--ink);
   text-decoration: none;
   text-align: center;
   padding: 1.1rem 0 0.9rem;
+  font-variation-settings: "opsz" 60, "SOFT" 30;
 }
 .masthead__meta {
   display: flex;
@@ -230,9 +234,16 @@ a:hover { text-decoration-color: var(--accent); }
   text-decoration: none;
 }
 .toc__title {
-  font-family: var(--serif);
-  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
-  line-height: 1.2;
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.45vw, 1.9rem);
+  font-weight: 450;
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+  /* Fraunces has these optional features; the variable axis SOFT relaxes
+     the contrast, opsz adapts shape to size, ss01 enables the alternative
+     g with the curled descender. Browsers without support quietly ignore. */
+  font-variation-settings: "opsz" 96, "SOFT" 40;
+  font-feature-settings: "kern" 1, "liga" 1, "dlig" 1, "ss01" 1;
   color: var(--ink);
   background-image: linear-gradient(var(--accent), var(--accent));
   background-size: 0% 1px;
@@ -805,12 +816,14 @@ ul li, ol li { margin: 0.35rem 0; }
 }
 .hero--viz .eyebrow { color: color-mix(in oklab, var(--tviz-fwd) 40%, var(--muted)); }
 .hero--viz .hero__title {
-  font-family: var(--serif);
-  font-weight: 300;
+  font-family: var(--display);
+  font-weight: 460;
   color: var(--ink);
-  letter-spacing: 0.12em;
-  font-size: clamp(2rem, 6.5vw, 4.2rem);
+  letter-spacing: -0.015em;
+  font-size: clamp(2.2rem, 6.8vw, 4.4rem);
   text-shadow: 0 0 24px color-mix(in oklab, var(--tviz-fwd) 20%, transparent);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-feature-settings: "kern" 1, "liga" 1, "dlig" 1, "ss01" 1;
 }
 .hero--viz .hero__tagline {
   color: color-mix(in oklab, var(--ink) 65%, var(--muted));
