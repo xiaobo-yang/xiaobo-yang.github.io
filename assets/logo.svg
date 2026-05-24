@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Rounded rectangle with border -->
+  <rect x="10" y="10" width="180" height="180" rx="20" ry="20" fill="none" stroke="black" stroke-width="6"/>
+  
+  <!-- Larger uppercase X -->
+  <text x="30" y="160" font-family="Arial, sans-serif" font-size="160" font-weight="bold" fill="black">X</text>
+  
+  <!-- More legible script lowercase b -->
+  <text x="130" y="180" font-family="Palatino Linotype, serif" font-size="100" fill="black" style="font-style: italic;">b</text>
+</svg>

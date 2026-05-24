@@ -1235,7 +1235,10 @@ export function mountTransformerViz(root) {
   }
   rafId = requestAnimationFrame(step);
 
-  // Pause when hidden, hover-pause on desktop.
+  // Pause only when the tab is hidden (saves battery, no visible regression).
+  // Hover-pause was removed: it made the animation freeze whenever the cursor
+  // entered the hero, which on long visits felt like a stutter rather than a
+  // feature. The animation now plays continuously while the tab is visible.
   const onVis = () => {
     if (document.hidden) {
       running = false;
@@ -1251,30 +1254,9 @@ export function mountTransformerViz(root) {
   };
   document.addEventListener("visibilitychange", onVis);
 
-  const onEnter = () => {
-    if (!running) return;
-    running = false;
-    cancelAnimationFrame(rafId);
-  };
-  const onLeave = () => {
-    if (running) return;
-    running = true;
-    const resumeAt = lastCaption >= 0 ? STAGES[lastCaption].at : 0;
-    t0 = performance.now() - resumeAt * 1000;
-    lastCycleT = 0;
-    rafId = requestAnimationFrame(step);
-  };
-  const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-  if (mq.matches) {
-    root.addEventListener("mouseenter", onEnter);
-    root.addEventListener("mouseleave", onLeave);
-  }
-
   return () => {
     running = false;
     cancelAnimationFrame(rafId);
     document.removeEventListener("visibilitychange", onVis);
-    root.removeEventListener("mouseenter", onEnter);
-    root.removeEventListener("mouseleave", onLeave);
   };
 }

@@ -753,6 +753,9 @@ ul li, ol li { margin: 0.35rem 0; }
   max-height: min(64vh, 560px);
   margin: 0 auto;
   overflow: visible;
+  /* Decorative. Without this the browser hit-tests hundreds of SVG cells on
+     every mousemove pixel, contending with the rAF animation. */
+  pointer-events: none;
 }
 .tviz__caption {
   font-family: var(--mono);
@@ -765,6 +768,7 @@ ul li, ol li { margin: 0.35rem 0; }
   padding: 0 1rem;
   max-width: 58ch;
   transition: opacity 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+  pointer-events: none;
 }
 .tviz__scrub {
   list-style: none;
@@ -773,6 +777,7 @@ ul li, ol li { margin: 0.35rem 0; }
   gap: 0.45rem;
   padding: 0;
   margin: 1.2rem 0 0;
+  pointer-events: none;
 }
 .tviz__dot {
   width: 14px;
@@ -997,6 +1002,7 @@ ul li, ol li { margin: 0.35rem 0; }
   color: color-mix(in oklab, var(--tviz-fwd) 35%, var(--muted));
   margin: 0 auto 1.6rem;
   padding: 0.35rem 0.9rem;
+  pointer-events: none;
   max-width: 980px;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
