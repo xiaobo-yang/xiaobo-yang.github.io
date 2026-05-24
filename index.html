@@ -1,303 +1,89 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<!doctype html>
+<html lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.139.5"><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>Xiaobo&#39;s Blog</title>
-
-<meta name="description" content="">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Xiaobo Yang — Notebook · Vol. 1</title>
+<meta name="description" content="field notes on reinforcement learning, language models, and the math underneath.">
 <meta name="author" content="Xiaobo Yang">
-<link rel="canonical" href="https://xiaobo-yang.github.io/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d4da565dc53861aa93341c7e9ece0447238abcb1162eb9007a3a9068422d0975.css" integrity="sha256-1NpWXcU4YaqTNBx&#43;ns4ERyOKvLEWLrkAejqQaEItCXU=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://xiaobo-yang.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://xiaobo-yang.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://xiaobo-yang.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://xiaobo-yang.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://xiaobo-yang.github.io/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://xiaobo-yang.github.io/index.xml">
-<link rel="alternate" type="application/json" href="https://xiaobo-yang.github.io/index.json">
-<link rel="alternate" hreflang="en" href="https://xiaobo-yang.github.io/">
-<link rel="alternate" hreflang="zh" href="https://xiaobo-yang.github.io/zh/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
+<meta property="og:title" content="Xiaobo Yang — Notebook · Vol. 1">
+<meta property="og:description" content="field notes on reinforcement learning, language models, and the math underneath.">
+<meta property="og:type" content="website">
 
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
-        });
-    });
-</script><meta property="og:url" content="https://xiaobo-yang.github.io/">
-  <meta property="og:site_name" content="Xiaobo&#39;s Blog">
-  <meta property="og:title" content="Xiaobo&#39;s Blog">
-  <meta property="og:locale" content="en-US">
-  <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Xiaobo&#39;s Blog">
-<meta name="twitter:description" content="">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Xiaobo's Blog",
-  "url": "https://xiaobo-yang.github.io/",
-  "description": "",
-  "logo": "https://xiaobo-yang.github.io/favicon.ico",
-  "sameAs": [
-      "https://github.com/xiaobo-yang", "https://x.com/xiaoboyang25", "mailto:1800010745@pku.edu.cn"
-  ]
-}
-</script>
+<link rel="alternate" hreflang="zh" href="/zh/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<script type="importmap">{"imports":{"@chenglou/pretext":"/vendor/pretext/layout.js","@chenglou/pretext/rich-inline":"/vendor/pretext/rich-inline.js"}}</script>
 </head>
-
-<body class="list" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://xiaobo-yang.github.io/" accesskey="h" title="Xiaobo&#39;s Blog (Alt + H)">
-                <img src="https://xiaobo-yang.github.io/logo.svg" alt="" aria-label="logo"
-                    height="27">Xiaobo&#39;s Blog</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-                <ul class="lang-switch"><li>|</li>
-                    <li>
-                        <a href="https://xiaobo-yang.github.io/zh/" title="中文"
-                            aria-label="中文">中文</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="https://xiaobo-yang.github.io/" title="Posts">
-                    <span class="active">Posts</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://xiaobo-yang.github.io/archive/" title="Archive">
-                    <span>Archive</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://xiaobo-yang.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
-                    <span>Search</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://xiaobo-yang.github.io/tags/" title="Tags">
-                    <span>Tags</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://xiaobo-yang.github.io/contact/" title="Contact">
-                    <span>Contact</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main"> 
-<article class="first-entry home-info">
-    <header class="entry-header">
-        <h1>👋 Welcome to Xiaobo&rsquo;s Blog</h1>
-    </header>
-    <div class="entry-content">
-        I&rsquo;m Xiaobo Yang, a PhD student at Peking University.
-    </div>
-    <footer class="entry-footer">
-        <div class="social-icons" >
-    <a href="https://github.com/xiaobo-yang" target="_blank" rel="noopener noreferrer me"
-        title="Github">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-    stroke-linecap="round" stroke-linejoin="round">
-    <path
-        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-    </path>
-</svg>
-    </a>
-    <a href="https://x.com/xiaoboyang25" target="_blank" rel="noopener noreferrer me"
-        title="Twitter">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-    stroke-linecap="round" stroke-linejoin="round">
-    <path
-        d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
-    </path>
-</svg>
-    </a>
-    <a href="mailto:1800010745@pku.edu.cn" target="_blank" rel="noopener noreferrer me"
-        title="Email">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21" fill="none" stroke="currentColor" stroke-width="2"
-    stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-    <polyline points="22,6 12,13 2,6"></polyline>
-</svg>
-    </a>
-</div>
-
-    </footer>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Theory In large language model reinforcement learning training, there are two ways to incorporate KL divergence constraints: reward shaping and KL loss. The former directly adds KL estimation to the reward value as a new reward $r \leftarrow r - \beta\cdot KL$; the latter puts the KL estimation term in the loss function, computing $\nabla_\theta \operatorname{KL}(\pi_\theta||\pi_{ref})$ for backpropagation.
-Schulman (2020) proposed three methods for estimating KL divergence, among which k3 loss is considered a good estimator with both unbiased and low variance properties. DeepSeek’s GRPO algorithm (Guo et al. 2025) adopted this approach:
-...</p>
+<body class="page-home" data-lang="en">
+<a class="skip" href="#content">Skip to content</a>
+<header class="masthead">
+  <div class="masthead__rule"></div>
+  <a class="masthead__author" href="/">XIAOBO  YANG</a>
+  <div class="masthead__meta">
+    <span class="vol">Notebook · Vol. 1</span>
+    <span class="lang-toggle"><a href="/zh/" data-lang="zh">zh</a></span>
   </div>
-  <footer class="entry-footer"><span title='2025-03-14 00:00:00 +0000 UTC'>March 14, 2025</span>&nbsp;·&nbsp;10 min&nbsp;·&nbsp;2021 words&nbsp;·&nbsp;Xiaobo Yang</footer>
-  <a class="entry-link" aria-label="post link to Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning" href="https://xiaobo-yang.github.io/posts/kl_grad/"></a>
-</article>
-    </main>
-    
+  <div class="masthead__rule"></div>
+</header>
+
+<main id="content">
+<section class="hero hero--viz" data-lang="en">
+  <div class="tv-telemetry" aria-hidden="true">
+    <span data-tele="step">step 0001</span>
+    <span class="tv-telemetry__dot">·</span>
+    <span data-tele="loss">loss 1.247</span>
+    <span class="tv-telemetry__dot">·</span>
+    <span data-tele="grad">‖∇‖ 0.000</span>
+    <span class="tv-telemetry__dot">·</span>
+    <span data-tele="lr">lr 3.0e-4</span>
+    <span class="tv-telemetry__dot">·</span>
+    <span data-tele="cycle">epoch 1</span>
+  </div>
+  <div class="tviz" data-captions='{"staticPreview":"static preview · multi-head attention at a glance","stages":["tokens · four words enter the model","embed · E ∈ ℝ⁴ˣ⁸ · each token becomes a vector","split · E fans out to two heads in parallel","scores · Sₕ = Qₕ Kₕᵀ / √d · every query meets every key","softmax · each row renormalizes into a probability","head outputs · Oₕ = Aₕ Vₕ · weighted sums of values","concat · head outputs stitch back side-by-side","project · the layer emits its final embedding","forward · the whole pass held in memory","loss · L = ½ ‖O‖² · something to differentiate","∂L/∂O · the signal enters the graph backwards","∂L/∂A, ∂L/∂V · gradients fan back through each head","∂L/∂S, ∂L/∂Q, ∂L/∂K, ∂L/∂E · all the way to the tokens","loop · a single heartbeat of learning"]}'>
+    <svg class="tviz__svg" viewBox="0 0 1280 520" preserveAspectRatio="xMidYMid meet"
+         aria-label="Animated transformer forward and backward pass" role="img"></svg>
+    <p class="tviz__caption" aria-live="polite">&nbsp;</p>
+    <ol class="tviz__scrub" aria-hidden="true"></ol>
+  </div>
+  <div class="hero__identity">
+    <p class="eyebrow">Notebook · Vol. 1</p>
+    <h1 class="hero__title" data-pretext="balance" data-target-lines="1">XIAOBO  YANG</h1>
+    <p class="hero__tagline" data-pretext="balance" data-target-lines="2" data-taglines='["field notes on reinforcement learning, language models, and the math underneath.","tracing gradients through attention, one ½‖O‖² at a time.","policies, value functions, and the quiet algebra that ties them.","softmax is just a thermostat — most of deep learning is, when you squint.","watching loss curves the way other people watch the tide."]'>field notes on reinforcement learning, language models, and the math underneath.</p>
+    <div class="hero__hairline"></div>
+  </div>
+</section>
+
+<section class="toc" aria-labelledby="toc-h">
+  <h2 id="toc-h" class="toc__h">Posts <span class="count">— 1</span></h2>
+  <ol class="toc__list">
+    <li class="toc__item">
+  <a class="toc__link" href="/posts/kl_grad/">
+    <span class="toc__title" data-pretext="balance" data-target-lines="2">Gradient Estimation of KL Divergence in Large Language Model Reinforcement Learning</span>
+    <span class="toc__leader" aria-hidden="true"></span>
+    <time class="toc__date" datetime="2025-03-14">Mar 14, 2025</time>
+  </a>
+  <p class="toc__summary">Three estimators, one loss, and the subtle gap between ∇E[·] and E[∇·].</p>
+  <p class="toc__tags"><span class="tag">Reinforcement Learning</span><span class="tag">KL divergence</span><span class="tag">Theory</span></p>
+</li>
+  </ol>
+</section>
+
+<section class="colophon">
+  <p>Personal notebook of Xiaobo Yang — typeset on @chenglou/pretext for live, dynamic shrinkwrapping of every line.</p>
+</section>
+</main>
+
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://xiaobo-yang.github.io/">Xiaobo&#39;s Blog</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
+  <div class="footer__rule"></div>
+  <div class="footer__row">
+    <span class="footer__sig">Xiaobo Yang · 2026</span>
+    <span class="footer__type">Typeset live with @chenglou/pretext</span>
+  </div>
 </footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
 
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
+<script type="module" src="/assets/client/home.js"></script>
 </body>
-
 </html>

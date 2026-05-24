@@ -1,0 +1,1035 @@
+/* ──────────────────────────────────────────────────────────────────
+   Xiaobo · pretext notebook — minimalist print + dynamic typography
+   ────────────────────────────────────────────────────────────────── */
+
+:root {
+  --paper:        #fafaf7;
+  --paper-soft:   #f3f1ea;
+  --ink:          #1a1a1a;
+  --muted:        #6b6b67;
+  --rule:         #d8d2bf;
+  --rule-soft:    #ece7d4;
+  --accent:       #b34a36;
+  --accent-soft:  #d6826f;
+  --gold:         #c8a85b;
+
+  --serif:  "Source Serif 4", "Source Serif Pro", "EB Garamond",
+            "Iowan Old Style", Cambria, Georgia, serif;
+  --sans:   Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+            sans-serif;
+  --mono:   "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  --col:  66ch;
+  --gut:  8vw;
+  --line: 1.65;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:       #16140f;
+    --paper-soft:  #1f1c14;
+    --ink:         #ece6d3;
+    --muted:       #a09a86;
+    --rule:        #3a352a;
+    --rule-soft:   #2a261c;
+    --accent:      #d6826f;
+    --accent-soft: #b34a36;
+    --gold:        #d8b86b;
+  }
+  .post__body pre,
+  .code-block pre { filter: invert(0.92) hue-rotate(180deg); }
+  .figure img { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: var(--line);
+  font-size: clamp(15px, 0.55vw + 13px, 18px);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "onum";
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 0.2s ease;
+}
+a:hover { text-decoration-color: var(--accent); }
+
+.skip {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 0.8rem;
+  background: var(--ink);
+  color: var(--paper);
+  z-index: 9999;
+}
+
+/* ───────── masthead ───────── */
+.masthead {
+  max-width: 1100px;
+  margin: 4vh auto 0;
+  padding: 0 var(--gut);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.masthead__rule {
+  height: 1px;
+  background: var(--rule);
+  transform-origin: left;
+  animation: ruleIn 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.masthead__author {
+  display: block;
+  font-family: var(--serif);
+  text-transform: none;
+  letter-spacing: 0.45em;
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-decoration: none;
+  text-align: center;
+  padding: 1.1rem 0 0.9rem;
+}
+.masthead__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 1rem;
+}
+.masthead__meta .vol { color: var(--muted); }
+.lang-toggle a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 0.4em;
+}
+.lang-toggle a:hover { color: var(--accent); }
+
+@keyframes ruleIn {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ───────── hero ───────── */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 9vh var(--gut) 5vh;
+  text-align: center;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 1.4rem;
+}
+.hero__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 8.5vw, 6rem);
+  letter-spacing: 0.05em;
+  line-height: 1.02;
+  margin: 0 auto;
+  text-rendering: geometricPrecision;
+}
+.hero__tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  color: var(--muted);
+  margin: 1.8rem auto 0;
+  line-height: 1.45;
+  max-width: 36ch;
+}
+.hero__hairline {
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  margin: 3.2rem auto 0;
+  animation: drawIn 1.4s 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes drawIn {
+  from { width: 0; }
+  to   { width: 4rem; }
+}
+
+/* ───────── home table-of-contents ───────── */
+.toc {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 5vh var(--gut) 8vh;
+}
+.toc__h {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.toc__h .count { color: var(--rule); }
+.toc__list { list-style: none; margin: 0; padding: 0; }
+.toc__item {
+  padding: 1.8rem 0 1.6rem;
+  border-top: 1px solid var(--rule);
+}
+.toc__item:last-child { border-bottom: 1px solid var(--rule); }
+
+/* Scroll-in stagger. Only applied when JS marks the list with .is-armed —
+   without JS the items render at rest, so reduced-motion or no-JS is fine. */
+.toc__list.is-armed .toc__item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 700ms cubic-bezier(0.2, 0.7, 0.3, 1),
+              transform 700ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.toc__list.is-armed .toc__item.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .toc__list.is-armed .toc__item,
+  .toc__list.is-armed .toc__item.is-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+.toc__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  text-decoration: none;
+}
+.toc__title {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  line-height: 1.2;
+  color: var(--ink);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+  display: inline;
+}
+.toc__link:hover .toc__title { background-size: 100% 1px; }
+.toc__leader { display: none; }
+.toc__date {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.toc__summary {
+  margin: 0.8rem 0 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.toc__tags { margin: 0.5rem 0 0; }
+.tag {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-right: 0.9rem;
+}
+.tag::before {
+  content: "·";
+  padding-right: 0.35rem;
+  color: var(--rule);
+}
+.toc__empty { color: var(--muted); padding: 1.2rem 0; }
+
+.colophon {
+  max-width: 36rem;
+  margin: 4vh auto 8vh;
+  padding: 0 var(--gut);
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* ───────── post page ───────── */
+.post {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: 0 var(--gut) 4vh;
+}
+.post__head {
+  text-align: center;
+  padding: 4vh 0 3vh;
+}
+.post__eyebrow {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto 4rem;
+  max-width: 56rem;
+}
+.post__eyebrow .back { text-decoration: none; }
+.post__eyebrow .post__langs a {
+  margin-left: 0.6rem;
+  text-decoration: none;
+}
+.post__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4.6vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  margin: 0 auto;
+}
+.post__summary {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.5;
+  margin: 1.8rem auto 0;
+}
+.post__meta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.8rem 0 0;
+}
+.post__meta .dot { padding: 0 0.45em; color: var(--rule); }
+.post__hairline {
+  width: 4rem;
+  height: 1px;
+  background: var(--accent);
+  margin: 2.8rem auto 0;
+}
+
+/* ── post hero stagger ──
+   The header doesn't have its own animation — it just lifts into place
+   as the page renders. Each row fires slightly later than the one above
+   it so the eye reads top-to-bottom. */
+@keyframes postRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.page-post .post__eyebrow { animation: postRise 0.7s cubic-bezier(0.2,0.7,0.3,1) 0.05s both; }
+.page-post .post__title   { animation: postRise 0.85s cubic-bezier(0.2,0.7,0.3,1) 0.18s both; }
+.page-post .post__summary { animation: postRise 0.85s cubic-bezier(0.2,0.7,0.3,1) 0.34s both; }
+.page-post .post__meta    { animation: postRise 0.7s cubic-bezier(0.2,0.7,0.3,1) 0.5s both; }
+.page-post .post__head .post__hairline {
+  width: 0;
+  animation: drawIn 1.4s cubic-bezier(0.2,0.7,0.3,1) 0.65s forwards;
+}
+.page-post .post__toc { animation: postRise 0.85s cubic-bezier(0.2,0.7,0.3,1) 0.78s both; }
+
+/* ── post body scroll reveal ──
+   JS marks `.post__body` with `.is-armed`. From there, h2/h3/pre/figure
+   /display-math start translucent and lifted; the IntersectionObserver
+   adds `.is-in` as each lands in view. Items already on screen at boot
+   get `.is-in` immediately so nothing pops behind the reader. */
+.post__body.is-armed > h2,
+.post__body.is-armed > h3,
+.post__body.is-armed > pre,
+.post__body.is-armed > .code-block,
+.post__body.is-armed > figure,
+.post__body.is-armed > .katex-display,
+.post__body.is-armed > blockquote {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 720ms cubic-bezier(0.2,0.7,0.3,1),
+              transform 720ms cubic-bezier(0.2,0.7,0.3,1);
+  will-change: opacity, transform;
+}
+.post__body.is-armed > .is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* hairline accent that sweeps under the active TOC entry */
+.post__toc a.is-current {
+  color: var(--ink);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-post .post__eyebrow,
+  .page-post .post__title,
+  .page-post .post__summary,
+  .page-post .post__meta,
+  .page-post .post__toc {
+    animation: none;
+  }
+  .page-post .post__head .post__hairline {
+    animation: none;
+    width: 4rem;
+  }
+  .post__body.is-armed > h2,
+  .post__body.is-armed > h3,
+  .post__body.is-armed > pre,
+  .post__body.is-armed > .code-block,
+  .post__body.is-armed > figure,
+  .post__body.is-armed > .katex-display,
+  .post__body.is-armed > blockquote {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* in-post table of contents */
+.post__toc {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  max-width: 38rem;
+  margin: 3rem auto 0;
+  padding: 0.8rem 1.5rem;
+  border-left: 1px solid var(--rule);
+}
+.post__toc-h {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.62rem;
+  margin: 0 0 0.8rem;
+  color: var(--rule);
+}
+.post__toc ol { list-style: none; padding: 0; margin: 0; }
+.post__toc li { margin: 0.3rem 0; }
+.post__toc li.d2 { padding-left: 1.2rem; }
+.post__toc a { color: var(--muted); text-decoration: none; }
+.post__toc a:hover { color: var(--accent); }
+
+.post__body {
+  max-width: var(--col);
+  margin: 4vh auto 0;
+}
+.post__body h1,
+.post__body h2,
+.post__body h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+.post__body h1 { font-size: 1.55rem; margin: 3rem 0 1rem; }
+.post__body h2 { font-size: 1.3rem;  margin: 2.4rem 0 0.9rem; }
+.post__body h3 { font-size: 1.1rem;  margin: 1.8rem 0 0.6rem; }
+.post__body h1::before,
+.post__body h2::before {
+  content: "";
+  display: block;
+  width: 1.4rem;
+  height: 1px;
+  background: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.post__body p { margin: 1rem 0; }
+.post__body a.anchor {
+  color: var(--rule);
+  text-decoration: none;
+  font-size: 0.7em;
+  margin-right: 0.4em;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.post__body :is(h1, h2, h3):hover a.anchor { opacity: 1; }
+.post__body a.anchor:hover { color: var(--accent); }
+
+.post__body code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: rgba(179, 74, 54, 0.08);
+  padding: 0.05em 0.35em;
+  border-radius: 2px;
+  color: var(--accent);
+}
+.post__body pre,
+.code-block pre {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  background: var(--paper-soft) !important;
+  padding: 1.1rem 1.2rem;
+  margin: 1.6rem -0.5rem;
+  border-left: 2px solid var(--accent);
+  overflow-x: auto;
+}
+.post__body pre code,
+.code-block pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+.code-block { position: relative; }
+.code-block::after {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.7rem;
+  right: 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* ── collapsible long code blocks ──
+   JS adds .is-collapsible (and initially .is-collapsed) when a block
+   exceeds the threshold. Collapsed state caps the <pre> height via the
+   custom property `--cb-collapsed-max` (set per-block from JS), then
+   draws a fade gradient + a click-to-expand pill at the bottom. The
+   gradient color matches the visible <pre> background, including
+   under dark mode where the <pre> is filter-inverted. */
+.code-block.is-collapsible { padding-bottom: 2.4rem; }
+.code-block.is-collapsible.is-collapsed > pre {
+  max-height: var(--cb-collapsed-max, 18em);
+  overflow: hidden;
+}
+.code-block.is-collapsible.is-collapsed::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.2rem;
+  height: 6rem;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--paper-soft) 0%, transparent),
+    var(--paper-soft) 78%
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 320ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+@media (prefers-color-scheme: dark) {
+  /* the <pre> behind us is filter-inverted, so invert the overlay too
+     to keep its color a visual match. */
+  .code-block.is-collapsible.is-collapsed::before {
+    filter: invert(0.92) hue-rotate(180deg);
+  }
+}
+.code-block__toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 0.3rem;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 220ms cubic-bezier(0.2, 0.7, 0.3, 1),
+              border-color 220ms cubic-bezier(0.2, 0.7, 0.3, 1),
+              transform 220ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.code-block__toggle:hover,
+.code-block__toggle:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  outline: none;
+  transform: translateX(-50%) translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .code-block.is-collapsible.is-collapsed::before { transition: none; }
+  .code-block__toggle { transition: none; }
+}
+
+.math-display {
+  margin: 1.8rem 0;
+  overflow-x: auto;
+  text-align: center;
+}
+.math-error {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: rgba(179, 74, 54, 0.08);
+}
+
+.figure {
+  margin: 2.5rem auto;
+  text-align: center;
+}
+.figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.figure figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 0.8rem;
+}
+
+blockquote {
+  border-left: 2px solid var(--accent);
+  margin: 1.5rem 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+ul, ol { padding-left: 1.4rem; }
+ul li, ol li { margin: 0.35rem 0; }
+
+.post__foot { margin-top: 6vh; text-align: center; }
+.post__sig {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 0;
+}
+
+/* ───────── footer ───────── */
+.footer {
+  max-width: 1100px;
+  margin: 8vh auto 3rem;
+  padding: 0 var(--gut);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.footer__rule {
+  height: 1px;
+  background: var(--rule);
+  margin-bottom: 1rem;
+}
+.footer__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ───────── reading progress (post page) ───────── */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 100;
+  pointer-events: none;
+}
+.reading-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to right, var(--accent), var(--gold));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.08s linear;
+}
+
+/* pretext attaches `data-balanced="1"` once it has applied a max-width */
+[data-pretext="balance"][data-balanced="1"] {
+  transition: max-width 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  :root { --gut: 5vw; }
+  .post__eyebrow { margin-bottom: 2.5rem; }
+  .toc__link { grid-template-columns: 1fr; }
+  .toc__date { margin-top: 0.4rem; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Dark viz hero — the animated transformer
+   Scoped token overrides so the rest of the page keeps warm paper.
+   ────────────────────────────────────────────────────────────────── */
+
+.hero--viz {
+  /* self-contained palette — ignores prefers-color-scheme */
+  --paper:      #0b0d12;
+  --paper-soft: #14171f;
+  --ink:        #ece6d3;
+  --muted:      #7a8596;
+  --rule:       #2a3142;
+  --rule-soft:  #1b2030;
+  --accent:     #5eead4;
+  --accent-soft:#a78bfa;
+  --gold:       #f59e0b;
+
+  /* tviz-specific tokens (used by the SVG) */
+  --tviz-fwd:    #5eead4;
+  --tviz-fwd2:   #7dd3fc;
+  --tviz-q:      #5eead4;
+  --tviz-k:      #7dd3fc;
+  --tviz-v:      #a78bfa;
+  --tviz-bwd:    #ef4444;
+  --tviz-bwd2:   #f59e0b;
+  --tviz-rule:   #2a3142;
+  --tviz-grid:   #1b2030;
+
+  /* full-bleed */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  max-width: none;
+
+  background:
+    radial-gradient(1200px 500px at 50% 5%, rgba(94, 234, 212, 0.06), transparent 70%),
+    radial-gradient(900px 500px at 80% 110%, rgba(167, 139, 250, 0.06), transparent 70%),
+    var(--paper);
+  color: var(--ink);
+  padding: 7vh var(--gut) 5.5vh;
+  text-align: center;
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.hero--viz::before {
+  /* thin top rule in the forward color */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent, var(--tviz-fwd) 20%, var(--tviz-v) 50%, var(--tviz-bwd) 80%, transparent);
+  opacity: 0.6;
+}
+
+.tviz {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-bottom: 2.2rem;
+}
+.tviz__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(64vh, 560px);
+  margin: 0 auto;
+  overflow: visible;
+}
+.tviz__caption {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: var(--muted);
+  min-height: 1.6em;
+  margin: 1.6rem auto 0;
+  padding: 0 1rem;
+  max-width: 58ch;
+  transition: opacity 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.tviz__scrub {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0;
+  margin: 1.2rem 0 0;
+}
+.tviz__dot {
+  width: 14px;
+  height: 2px;
+  background: var(--rule);
+  border-radius: 1px;
+  transition: background 0.3s ease, width 0.3s ease, box-shadow 0.3s ease;
+}
+.tviz__dot.is-past     { background: color-mix(in oklab, var(--tviz-fwd) 40%, var(--rule)); }
+.tviz__dot.is-past.is-bwd { background: color-mix(in oklab, var(--tviz-bwd) 40%, var(--rule)); }
+.tviz__dot.is-current {
+  width: 28px;
+  background: var(--tviz-fwd);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--tviz-fwd) 60%, transparent);
+}
+.tviz__dot.is-current.is-bwd {
+  background: var(--tviz-bwd);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--tviz-bwd) 60%, transparent);
+}
+
+/* ── identity block below the viz ── */
+.hero__identity {
+  margin: 1.8rem auto 0;
+  max-width: 1100px;
+}
+.hero--viz .eyebrow { color: color-mix(in oklab, var(--tviz-fwd) 40%, var(--muted)); }
+.hero--viz .hero__title {
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: 0.12em;
+  font-size: clamp(2rem, 6.5vw, 4.2rem);
+  text-shadow: 0 0 24px color-mix(in oklab, var(--tviz-fwd) 20%, transparent);
+}
+.hero--viz .hero__tagline {
+  color: color-mix(in oklab, var(--ink) 65%, var(--muted));
+}
+.hero__tagline--rotating {
+  transition: opacity 460ms cubic-bezier(0.2, 0.7, 0.3, 1),
+              transform 460ms cubic-bezier(0.2, 0.7, 0.3, 1),
+              max-width 460ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  will-change: opacity, transform;
+}
+.hero__tagline--rotating.is-fading {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.hero--viz .hero__hairline {
+  background: linear-gradient(90deg, var(--tviz-fwd), var(--tviz-v));
+}
+
+/* ── tv-* internals: cells, connectors, labels ──
+   Performance note: cell fill colors are precomputed in JS and set via the
+   `fill` attribute at build time. Nothing in this section touches color-mix
+   on the hot path — per-frame work is only opacity on overlay rects. */
+
+.tv-mat__label {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  fill: var(--muted);
+}
+
+.tv-cell__base {
+  /* static — fill + stroke set via attributes in JS */
+}
+.tv-cell__fwd,
+.tv-cell__bwd {
+  will-change: opacity;
+}
+.tv-cell__val {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.01em;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  pointer-events: none;
+}
+
+/* tokens */
+.tv-token__bg {
+  fill: var(--tviz-grid);
+  stroke: var(--tviz-fwd);
+  stroke-opacity: 0.45;
+  stroke-width: 1;
+}
+.tv-token__bg--bwd {
+  fill: #3a1a1a;
+  stroke: var(--tviz-bwd);
+  stroke-opacity: 0.7;
+}
+.tv-token__txt {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  fill: var(--ink);
+  text-transform: uppercase;
+}
+
+/* connectors */
+.tv-conn {
+  fill: none;
+  stroke: var(--tviz-rule);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.tv-conn--fwd {
+  stroke: var(--tviz-fwd);
+  stroke-opacity: 0.9;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.55));
+}
+.tv-conn--bwd {
+  stroke: var(--tviz-bwd);
+  stroke-opacity: 0.95;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.6));
+}
+.tv-conn--q { stroke: var(--tviz-q); filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.5)); }
+.tv-conn--k { stroke: var(--tviz-k); filter: drop-shadow(0 0 3px rgba(125, 211, 252, 0.5)); }
+.tv-conn--v { stroke: var(--tviz-v); filter: drop-shadow(0 0 3px rgba(167, 139, 250, 0.55)); }
+.tv-conn--a { stroke: var(--tviz-fwd); filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.5)); }
+
+/* leading-edge tip of a ray */
+.tv-conn__tip {
+  fill: #f5efe0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(94, 234, 212, 0.95));
+  will-change: opacity, cx, cy;
+}
+.tv-conn__tip--bwd {
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.95));
+}
+
+/* loss badge */
+.tv-loss { pointer-events: none; }
+.tv-loss__ring {
+  fill: none;
+  stroke: var(--tviz-bwd);
+  stroke-width: 1.3;
+  stroke-dasharray: 4 4;
+}
+.tv-loss__big {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  fill: var(--tviz-bwd);
+}
+.tv-loss__sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  fill: var(--muted);
+}
+
+/* depth silhouettes — suggest layer stack */
+.tv-depth { pointer-events: none; }
+
+/* ── floating math-glyph atmosphere ──
+   Absolutely positioned spans inside .hero--viz, drifting on their own
+   randomized animation timings. JS seeds each glyph's position, duration,
+   and travel vector via CSS custom properties. */
+.tv-glyphs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.tv-glyph {
+  position: absolute;
+  font-family: var(--mono);
+  color: var(--tviz-fwd);
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  text-shadow: 0 0 8px rgba(94, 234, 212, 0.35);
+  animation-name: tv-glyph-drift;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  will-change: transform, opacity;
+}
+.tv-glyph--sky    { color: var(--tviz-k); text-shadow: 0 0 8px rgba(125, 211, 252, 0.35); }
+.tv-glyph--violet { color: var(--tviz-v); text-shadow: 0 0 8px rgba(167, 139, 250, 0.35); }
+
+@keyframes tv-glyph-drift {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  12%  { opacity: var(--tv-max-op, 0.1); }
+  88%  { opacity: var(--tv-max-op, 0.1); }
+  100% { transform: translate(var(--tv-dx, 0), var(--tv-dy, 0)); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-glyph { animation: none; opacity: 0.04; }
+}
+
+/* keep the active scene above the glyph backdrop */
+.hero--viz .tviz,
+.hero--viz .hero__identity {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── training telemetry strip ──
+   Mono dim line at the top of the hero. Values update ~7fps from JS,
+   tied to the transformer's cycle counter so they feel coherent. */
+.tv-telemetry {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: color-mix(in oklab, var(--tviz-fwd) 35%, var(--muted));
+  margin: 0 auto 1.6rem;
+  padding: 0.35rem 0.9rem;
+  max-width: 980px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+.tv-telemetry [data-tele] {
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.tv-telemetry__dot { color: var(--tviz-rule); }
+@media (max-width: 640px) {
+  .tv-telemetry {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    gap: 0.3rem;
+  }
+}
+
+/* ── reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .tviz__scrub { display: none; }
+}
+
+/* ── responsive tweaks ── */
+@media (max-width: 780px) {
+  .hero--viz {
+    padding: 5vh var(--gut) 4vh;
+  }
+  .tviz__caption {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+  .tviz__svg {
+    max-height: none;
+  }
+  .hero--viz .hero__title { font-size: clamp(1.8rem, 9vw, 2.8rem); }
+}
